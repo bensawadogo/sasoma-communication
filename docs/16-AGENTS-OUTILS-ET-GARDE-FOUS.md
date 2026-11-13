@@ -28,14 +28,8 @@ Donner un outil de rendu payant à un agent revient à lui laisser dépenser des
 - Limite de fond : « pas de produit généré par IA » reste une règle écrite plus la porte 2 de Ben. Aucun outil ne détecte une image générée.
 - Les agents ne peuvent pas lancer Bash : ils n'ont donc que Write et Edit pour écrire, ce que le garde-fou couvre.
 
-## Le modèle d'IA par agent (réglé le 13/11/2026)
-Ben a précisé : pas besoin de passer la session de construction sur Opus, Sonnet suffit pour construire ; il demande de **calibrer les agents**. Chaque agent a maintenant un modèle fixé dans son en-tête (`model:`), identique à la table de `scripts/verifier-agents.mjs` :
-| Agent | Modèle | Pourquoi |
-|---|---|---|
-| chef-de-studio | Opus | découpe, délègue et assemble : une erreur coûte le plus |
-| contrôleur | Opus | trouver ce qui ne va pas est le rôle le plus exigeant |
-| les 9 autres | Sonnet | rédaction, recherche, mise en forme |
-Opus consomme plus de tokens que Sonnet ; les coûts réels ne sont pas connus ici, la barre des tokens du Studio les montrera. Pour changer un agent : modifier la ligne `model:` de son fichier **et** la table `MODELES` de `scripts/verifier-agents.mjs`, puis lancer la vérification.
+## Le modèle d'IA par agent
+Source unique : `config/modeles.json` (profils eco, equilibre, max). Profil actif : **equilibre** (Opus pour chef-de-studio et contrôleur, Haiku pour le programmateur, Sonnet pour les 8 autres). Changer : `node scripts/profil-modele.mjs eco|equilibre|max`. Recherche, benchmarks, prix et autres outils : `docs/19-MODELES-BENCHMARKS-ET-ECONOMIE.md`.
 
 ## Vérification automatique des agents
 `node scripts/verifier-agents.mjs` contrôle les 11 agents : en-tête YAML lisible, nom, outils (aucun Bash ni outil de publication, d'envoi ou de suppression), skill `regles-cm`, garde-fou d'écriture, modèle, mémoire.

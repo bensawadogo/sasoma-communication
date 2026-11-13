@@ -8,25 +8,15 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { PERIMETRES } from './garde-fou-ecriture.mjs';
+import { aliasAnthropic, chargerConfig } from './lib-agents.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const require = createRequire(path.join(ROOT, 'studio', 'package.json'));
 const YAML = require('yaml');
 
-/** Le modèle de chaque agent (décision de Ben, voir docs/16). Un agent absent de cette table est une erreur. */
-export const MODELES = {
-  'chef-de-studio': 'opus',
-  controleur: 'opus',
-  veilleur: 'sonnet',
-  stratege: 'sonnet',
-  scenariste: 'sonnet',
-  'createur-visuel': 'sonnet',
-  programmateur: 'sonnet',
-  publicitaire: 'sonnet',
-  analyste: 'sonnet',
-  formateur: 'sonnet',
-  commercial: 'sonnet',
-};
+/** Le modèle de chaque agent : celui du profil actif de config/modeles.json (docs/19). */
+const CONFIG = chargerConfig();
+export const MODELES = Object.fromEntries(Object.keys(CONFIG.agents).map((nom) => [nom, aliasAnthropic(CONFIG, nom, CONFIG.actif)]));
 /** Outils qu'aucun agent ne doit avoir : exécuter des commandes, ou publier/envoyer/supprimer chez un tiers. */
 const INTERDITS = [/^Bash$/, /^PowerShell$/, /createScheduledPost(?!ForReview)/i, /publish/i, /delete/i, /sendMessage|send_message/i];
 
@@ -65,7 +55,7 @@ export function verifier() {
     const hook = JSON.stringify(fm.hooks ?? {});
     if (!hook.includes(`garde-fou-ecriture.mjs ${nom}`)) err("garde-fou d'écriture absent ou pour un autre agent");
     if (!(nom in PERIMETRES)) err("pas de périmètre d'écriture dans garde-fou-ecriture.mjs");
-    if (fm.model !== MODELES[nom]) err(`modèle « ${fm.model} » au lieu de « ${MODELES[nom]} » (docs/16)`);
+    if (fm.model !== MODELES[nom]) err(`modèle « ${fm.model} » au lieu de « ${MODELES[nom]} » (profil ${CONFIG.actif}, config/modeles.json)`);
     if (fm.memory !== 'project') err('mémoire de projet absente');
   }
   return erreurs;

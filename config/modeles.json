@@ -1,0 +1,156 @@
+{
+  "_lisez-moi": "Source unique des modèles d'IA par agent. Les scripts scripts/profil-modele.mjs (change le profil des agents Claude Code) et scripts/exporter-agents.mjs (génère les agents des autres outils) lisent ce fichier. Voir docs/19-MODELES-BENCHMARKS-ET-ECONOMIE.md.",
+  "date": "2026-11-13",
+  "actif": "equilibre",
+  "profils": {
+    "eco": "Le moins cher qui reste acceptable : modèles légers partout où une erreur est rattrapée par une porte de Ben.",
+    "equilibre": "Recommandé : un modèle fort pour décider et contrôler, un modèle moyen pour rédiger, un modèle léger pour les tâches mécaniques.",
+    "max": "Le plus fort pour tout ce qui engage le client. À réserver aux missions importantes."
+  },
+  "fournisseurs": {
+    "anthropic": {
+      "outil": "Claude Code (natif)",
+      "modeles": {
+        "haiku": { "id": "claude-haiku-5-5", "prix": "0,10 $ entrée / 0,50 $ sortie par million de tokens (jusqu'à 100 000 tokens de prompt)", "source": "platform.claude.com/docs/en/about-claude/pricing" },
+        "sonnet": { "id": "claude-sonnet-5-5", "prix": "2 $ / 10 $", "source": "idem" },
+        "opus": { "id": "claude-opus-5-5", "prix": "4 $ / 20 $", "source": "idem" },
+        "fable": { "id": "claude-fable-5-2", "prix": "8 $ / 40 $", "source": "idem" }
+      }
+    },
+    "openai": {
+      "outil": "Codex CLI, OpenCode",
+      "modeles": {
+        "luna": { "id": "gpt-6-luna", "prix": "0,10 $ / 0,50 $", "source": "developers.openai.com/api/docs/pricing" },
+        "terra": { "id": "gpt-6.1-terra", "prix": "1 $ / 5 $", "source": "idem" },
+        "sol": { "id": "gpt-6.1-sol", "prix": "2 $ / 10 $", "source": "idem" },
+        "astra": { "id": "gpt-6-astra", "prix": "10 $ / 50 $", "source": "idem" }
+      }
+    },
+    "deepseek": {
+      "outil": "OpenCode ou passerelle (LiteLLM, OpenRouter)",
+      "modeles": {
+        "flash": { "id": "deepseek-flash", "prix": "0,15 $ / 0,60 $ (hors pointe), 0,30 $ / 1,20 $ (pointe)", "source": "api-docs.deepseek.com/quick_start/pricing" },
+        "pro": { "id": "deepseek-v4-pro", "prix": "0,66 $ / 1,98 $ (hors pointe)", "source": "idem" }
+      }
+    },
+    "google": {
+      "outil": "Gemini CLI",
+      "modeles": {
+        "hydrogen": { "id": null, "nom": "Gemini 4 Hydrogen", "prix": "1,50 $ / 7,50 $", "source": "aistudio.google.com/docs/pricing", "note": "identifiant d'API non confirmé : à copier de la page de Google avant usage" },
+        "carbon": { "id": null, "nom": "Gemini 4 Carbon", "prix": "2 $ / 10 $ (4 $ / 20 $ dès le 1er décembre 2026)", "source": "idem", "note": "identifiant d'API non confirmé" }
+      }
+    }
+  },
+  "agents": {
+    "chef-de-studio": {
+      "metier": "Découpe la demande, délègue, assemble. Appels d'outils et suivi de longues tâches.",
+      "critere": "Agentique : appeler des outils, suivre un plan, ne pas se perdre.",
+      "benchmarks": ["BFCL V4 (appel d'outils, Berkeley)", "Artificial Analysis Intelligence Index (indice et coût par tâche)"],
+      "modeles": {
+        "eco": { "anthropic": "sonnet", "openai": "terra" },
+        "equilibre": { "anthropic": "opus", "openai": "sol" },
+        "max": { "anthropic": "fable", "openai": "astra" }
+      }
+    },
+    "controleur": {
+      "metier": "Vérifie un post contre la checklist de 9 points et les sources. Cherche ce qui ne va pas.",
+      "critere": "Fidélité aux sources, rigueur, ne pas valider par complaisance.",
+      "benchmarks": ["Vectara HHEM (fidélité d'un résumé à son document)", "test maison : posts piégés (evals/)"],
+      "modeles": {
+        "eco": { "anthropic": "sonnet", "openai": "terra" },
+        "equilibre": { "anthropic": "opus", "openai": "sol" },
+        "max": { "anthropic": "fable", "openai": "astra" }
+      }
+    },
+    "veilleur": {
+      "metier": "Recherche sourcée, vérification d'affirmations, mise à jour du savoir partagé.",
+      "critere": "Chercher le bon, citer ses sources, dire « inconnu » plutôt qu'inventer.",
+      "benchmarks": ["Vectara HHEM (fidélité aux documents lus)", "test maison : 10 questions à réponse connue (evals/)"],
+      "modeles": {
+        "eco": { "anthropic": "haiku", "openai": "luna", "deepseek": "flash" },
+        "equilibre": { "anthropic": "sonnet", "openai": "terra", "deepseek": "pro" },
+        "max": { "anthropic": "opus", "openai": "sol" }
+      }
+    },
+    "stratege": {
+      "metier": "Idées d'histoires, calendrier de 4 semaines.",
+      "critere": "Créativité adaptée à un public, planification.",
+      "benchmarks": ["Arena, catégorie Creative Writing (11/11/2026)", "EQ-Bench Creative Writing v3 (page non chargée ici)"],
+      "modeles": {
+        "eco": { "anthropic": "haiku", "openai": "luna" },
+        "equilibre": { "anthropic": "sonnet", "openai": "terra" },
+        "max": { "anthropic": "opus", "openai": "sol" }
+      }
+    },
+    "scenariste": {
+      "metier": "Scénarios courts, légendes, mots-clés, en français et au ton du client.",
+      "critere": "Qualité d'écriture en français, ton, respect des faits fournis.",
+      "benchmarks": ["Arena, catégorie Creative Writing (11/11/2026) : en anglais surtout, pas de catégorie française trouvée", "test maison : 5 scénarios notés à l'aveugle (evals/)"],
+      "modeles": {
+        "eco": { "anthropic": "sonnet", "openai": "terra" },
+        "equilibre": { "anthropic": "sonnet", "openai": "sol" },
+        "max": { "anthropic": "opus", "openai": "sol" }
+      }
+    },
+    "createur-visuel": {
+      "metier": "Briefs visuels et gabarits. Aucun rendu payant.",
+      "critere": "Briefs précis, respect des règles de marque.",
+      "benchmarks": ["aucun benchmark public adapté", "test maison (evals/)"],
+      "modeles": {
+        "eco": { "anthropic": "haiku", "openai": "luna" },
+        "equilibre": { "anthropic": "sonnet", "openai": "terra" },
+        "max": { "anthropic": "opus", "openai": "sol" }
+      }
+    },
+    "programmateur": {
+      "metier": "Crée les posts validés en mode revue dans Metricool.",
+      "critere": "Exécution exacte d'un appel d'outil ; la porte 3 de Ben rattrape une erreur.",
+      "benchmarks": ["BFCL V4 (appel d'outils)"],
+      "modeles": {
+        "eco": { "anthropic": "haiku", "openai": "luna" },
+        "equilibre": { "anthropic": "haiku", "openai": "luna" },
+        "max": { "anthropic": "sonnet", "openai": "terra" }
+      }
+    },
+    "publicitaire": {
+      "metier": "Briefs de campagne et lecture des chiffres publicitaires.",
+      "critere": "Chiffres exacts, budgets plafonnés.",
+      "benchmarks": ["Artificial Analysis Intelligence Index", "test maison : lecture d'un export de chiffres (evals/)"],
+      "modeles": {
+        "eco": { "anthropic": "haiku", "openai": "luna" },
+        "equilibre": { "anthropic": "sonnet", "openai": "terra" },
+        "max": { "anthropic": "opus", "openai": "sol" }
+      }
+    },
+    "analyste": {
+      "metier": "Bilan mensuel avec les vrais chiffres.",
+      "critere": "Exactitude des chiffres, jamais d'estimation présentée comme un résultat.",
+      "benchmarks": ["Artificial Analysis Intelligence Index", "test maison : bilan sur données connues (evals/)"],
+      "modeles": {
+        "eco": { "anthropic": "haiku", "openai": "luna" },
+        "equilibre": { "anthropic": "sonnet", "openai": "terra" },
+        "max": { "anthropic": "opus", "openai": "sol" }
+      }
+    },
+    "formateur": {
+      "metier": "Fiches, exercices et jeux pour les secrétaires, en français simple.",
+      "critere": "Clarté, phrases courtes, exemples exacts.",
+      "benchmarks": ["aucun benchmark public adapté", "test maison (evals/)"],
+      "modeles": {
+        "eco": { "anthropic": "haiku", "openai": "luna" },
+        "equilibre": { "anthropic": "sonnet", "openai": "terra" },
+        "max": { "anthropic": "opus", "openai": "sol" }
+      }
+    },
+    "commercial": {
+      "metier": "Propositions, grille de prix, contrats simples, fiches de prospects (jamais envoyés).",
+      "critere": "Persuasion honnête, aucun prix inventé.",
+      "benchmarks": ["GDPval (tâches professionnelles réelles ; aucun détail marketing/vente trouvé)", "test maison (evals/)"],
+      "modeles": {
+        "eco": { "anthropic": "haiku", "openai": "luna" },
+        "equilibre": { "anthropic": "sonnet", "openai": "terra" },
+        "max": { "anthropic": "opus", "openai": "sol" }
+      }
+    }
+  }
+}

@@ -10,7 +10,7 @@ hooks:
       hooks:
         - type: command
           command: "node C:/SASOMA-COMMUNICATION/scripts/garde-fou-ecriture.mjs programmateur"
-model: sonnet
+model: haiku
 memory: project
 ---
 
