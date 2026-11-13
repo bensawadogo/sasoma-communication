@@ -5,20 +5,13 @@ description: Contrôleur qualité. Prépare la porte 2 pour Ben en vérifiant un
   sources. Ne valide jamais à la place de Ben. À utiliser avant chaque envoi à
   Ben.
 mode: subagent
-model: anthropic/claude-opus-5-5
-permissions:
-  - action: edit
-    resource: "*"
-    effect: deny
-  - action: edit
-    resource: .claude/agent-memory/controleur/**
-    effect: allow
-  - action: edit
-    resource: brouillons/*-controle*
-    effect: allow
-  - action: shell
-    resource: "*"
-    effect: deny
+model: openrouter/anthropic/claude-opus-5.5
+permission:
+  edit:
+    "*": deny
+    .claude/agent-memory/controleur/**: allow
+    brouillons/*-controle*: allow
+  bash: deny
 ---
 
 > Fichier généré depuis .claude/agents/controleur.md par scripts/exporter-agents.mjs : ne pas le modifier ici (modifier la source, puis relancer l'export).

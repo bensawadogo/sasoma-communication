@@ -41,6 +41,7 @@ Définition de travail (à valider par Ben, voir `docs/05-VERIFICATIONS-ET-HYPOT
 | `studio/` | Copie locale de pixel-agents (MIT), à installer et personnaliser |
 | `docs/11-ORGANISATION-DE-L-EQUIPE.md` | Organigramme des 11 agents, outils réels, flux de travail, règles d'équipe |
 | `docs/12-TEST-IPHONE.md` + `lancer-studio.ps1` | Tester le Studio sur iPhone (Wi-Fi ou Tailscale) et script de lancement |
+| `docs/21-AUTONOMIE-MULTI-OUTILS.md` | Continuer sans abonnement Claude : OpenCode, Kilo, Codex, Gemini CLI, Hermes ; mémoire commune `ETAT-DU-PROJET.md` ; sécurité de l'ordinateur |
 | `docs/20-DELEGUE-IA-OPENROUTER.md` | Serveur MCP `delegue-ia` : faire travailler d'autres IA via OpenRouter (classe des données, nettoyage, plafonds, ce que Ben doit faire) |
 | `docs/19-MODELES-BENCHMARKS-ET-ECONOMIE.md` | Benchmarks lus (Arena, Artificial Analysis, Vectara...), prix officiels, modèle de chaque agent, export vers OpenCode/Codex/Gemini CLI, économie, confidentialité |
 | `docs/18-TUNNELS-COMPARATIF.md` | ngrok, Cloudflare, Tailscale, VS Code, zrok : limites officielles, usage commercial, recommandation |

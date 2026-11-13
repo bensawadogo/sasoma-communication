@@ -1,0 +1,32 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "openrouter/anthropic/claude-sonnet-5.5",
+  "instructions": ["ETAT-DU-PROJET.md"],
+  "mcp": {
+    "delegue-ia": {
+      "type": "local",
+      "command": ["node", "scripts/delegue-ia/serveur.mjs"],
+      "environment": { "OPENROUTER_API_KEY": "{env:OPENROUTER_API_KEY}" }
+    }
+  },
+  "permission": {
+    "external_directory": "deny",
+    "bash": {
+      "*": "ask",
+      "git status*": "allow",
+      "git diff*": "allow",
+      "git log*": "allow",
+      "git push*": "deny"
+    },
+    "read": {
+      "*": "allow",
+      "*standalone-token*": "deny",
+      "*.env*": "deny"
+    },
+    "edit": {
+      "*": "allow",
+      "production/*": "ask",
+      "photos-clients/*": "ask"
+    }
+  }
+}

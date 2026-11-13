@@ -4,23 +4,14 @@ description: Commercial. Prépare, pour Ben seulement, les propositions d'une
   les entreprises qui ont reçu un logo animé. N'envoie jamais rien. À utiliser
   pour développer la clientèle.
 mode: subagent
-model: anthropic/claude-sonnet-5-5
-permissions:
-  - action: edit
-    resource: "*"
-    effect: deny
-  - action: edit
-    resource: clients/**
-    effect: allow
-  - action: edit
-    resource: brouillons/**
-    effect: allow
-  - action: edit
-    resource: .claude/agent-memory/commercial/**
-    effect: allow
-  - action: shell
-    resource: "*"
-    effect: deny
+model: openrouter/anthropic/claude-sonnet-5.5
+permission:
+  edit:
+    "*": deny
+    clients/**: allow
+    brouillons/**: allow
+    .claude/agent-memory/commercial/**: allow
+  bash: deny
 ---
 
 > Fichier généré depuis .claude/agents/commercial.md par scripts/exporter-agents.mjs : ne pas le modifier ici (modifier la source, puis relancer l'export).

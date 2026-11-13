@@ -1,0 +1,13 @@
+# Réglages Codex CLI pour ce projet (voir docs/21). Aucune clé ici : OPENROUTER_API_KEY vient de l'environnement de Ben.
+# Rester dans le dossier du projet : écriture limitée à l'espace de travail.
+sandbox_mode = "workspace-write"
+approval_policy = "on-request"
+
+[sandbox_workspace_write]
+network_access = false
+
+# Autres IA via OpenRouter (classe des données, nettoyage, plafonds : docs/20)
+[mcp_servers.delegue-ia]
+command = "node"
+args = ["C:/SASOMA-COMMUNICATION/scripts/delegue-ia/serveur.mjs"]
+env_vars = ["OPENROUTER_API_KEY"]

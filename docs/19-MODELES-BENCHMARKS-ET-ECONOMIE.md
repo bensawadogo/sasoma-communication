@@ -65,7 +65,7 @@ Changé par rapport au 13/11 matin : le programmateur passe de Sonnet à Haiku (
 | Outil | Où | Commande | Ce qui est vérifié |
 |---|---|---|---|
 | Claude Code (natif) | `.claude/agents/` | `node scripts/profil-modele.mjs eco\|equilibre\|max` | Documentation officielle lue ; garde-fou d'écriture **matériel** (hook) |
-| OpenCode | `.opencode/agents/*.md` | `node scripts/exporter-agents.mjs --cible opencode [--fournisseur openai]` | Format officiel lu ; droits d'écriture traduits en `permissions` (syntaxe des chemins à confirmer) |
+| OpenCode | `.opencode/agents/*.md` | `node scripts/exporter-agents.mjs --cible opencode [--fournisseur openrouter|anthropic|openai]` | **Testé sur OpenCode 1.19.5** : agents chargés, droits d'écriture par agent appliqués (syntaxe `permission` de la 1.x ; la syntaxe `permissions` de la doc en ligne est refusée par cette version). Voir `docs/21` |
 | Codex CLI | `.codex/agents/*.toml` | `--cible codex` | Format officiel lu (nom, description, modèle, instructions) ; serveurs MCP et sandbox se règlent dans la session, pas par agent |
 | Gemini CLI | `.gemini/agents/*.md` | `--cible gemini --modele-gemini <identifiant>` | Format officiel lu ; **sans liste d'outils** : l'agent hérite de tout (à restreindre dans Gemini CLI) ; identifiant d'API Gemini 4 non confirmé |
 | Cursor, Copilot, autres | `AGENTS.md`, `.agents/skills/` | `--cible agents` | Support du format SKILL.md **rapporté** par des blogs, à vérifier outil par outil |

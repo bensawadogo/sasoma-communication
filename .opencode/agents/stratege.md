@@ -3,23 +3,14 @@ description: Stratège de contenu. Propose des idées d'histoires et un calendri
   de publication adaptés au public réel du client, avec la meilleure heure de
   publication. À utiliser après qu'un thème a été donné.
 mode: subagent
-model: anthropic/claude-sonnet-5-5
-permissions:
-  - action: edit
-    resource: "*"
-    effect: deny
-  - action: edit
-    resource: brouillons/**
-    effect: allow
-  - action: edit
-    resource: production/**
-    effect: allow
-  - action: edit
-    resource: .claude/agent-memory/stratege/**
-    effect: allow
-  - action: shell
-    resource: "*"
-    effect: deny
+model: openrouter/anthropic/claude-sonnet-5.5
+permission:
+  edit:
+    "*": deny
+    brouillons/**: allow
+    production/**: allow
+    .claude/agent-memory/stratege/**: allow
+  bash: deny
 ---
 
 > Fichier généré depuis .claude/agents/stratege.md par scripts/exporter-agents.mjs : ne pas le modifier ici (modifier la source, puis relancer l'export).

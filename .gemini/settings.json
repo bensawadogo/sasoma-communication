@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "delegue-ia": {
+      "command": "node",
+      "args": ["C:/SASOMA-COMMUNICATION/scripts/delegue-ia/serveur.mjs"],
+      "env": { "OPENROUTER_API_KEY": "$OPENROUTER_API_KEY" },
+      "trust": false
+    }
+  }
+}

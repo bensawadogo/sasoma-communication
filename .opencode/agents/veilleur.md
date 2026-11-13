@@ -5,23 +5,14 @@ description: Veilleur et chercheur. Vérifie les faits, suit les changements des
   utiliser avant de promettre quoi que ce soit à un client ou pour répondre à «
   est-ce vrai ? ».
 mode: subagent
-model: anthropic/claude-sonnet-5-5
-permissions:
-  - action: edit
-    resource: "*"
-    effect: deny
-  - action: edit
-    resource: recherches/**
-    effect: allow
-  - action: edit
-    resource: knowledge/**
-    effect: allow
-  - action: edit
-    resource: .claude/agent-memory/veilleur/**
-    effect: allow
-  - action: shell
-    resource: "*"
-    effect: deny
+model: openrouter/anthropic/claude-sonnet-5.5
+permission:
+  edit:
+    "*": deny
+    recherches/**: allow
+    knowledge/**: allow
+    .claude/agent-memory/veilleur/**: allow
+  bash: deny
 ---
 
 > Fichier généré depuis .claude/agents/veilleur.md par scripts/exporter-agents.mjs : ne pas le modifier ici (modifier la source, puis relancer l'export).

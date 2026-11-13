@@ -3,6 +3,12 @@
 Fichier généré par scripts/exporter-agents.mjs : ne pas le modifier ici.
 Service de community management : on propose, **Ben décide**. Contexte complet : README.md, docs/03-PROCESSUS-CM.md, clients/.
 
+## Début et fin de chaque session (tous les outils)
+1. **Lis `ETAT-DU-PROJET.md`** : mémoire commune du projet (qui est Ben, comment travailler avec lui, décisions prises, ce qui est fait, ce qui attend). Ben écrit en français : réponds en français.
+2. Travaille **dans le dossier du projet** ; n'ouvre rien d'autre sur l'ordinateur de Ben sans son accord. Ne lis jamais un fichier de jeton, de clé ou `.env`.
+3. **À la fin**, mets à jour la section « Reprise » de `ETAT-DU-PROJET.md` (fait, en cours, prochain pas, ce qui attend Ben), puis lance `node scripts/relais.mjs`. C'est ce qui permet de changer d'outil sans rien perdre.
+4. Pour confier une tâche à une autre IA, utilise l'outil `delegue-ia` (docs/20), jamais un envoi direct de données de client.
+
 ## L'équipe
 | Agent | Métier |
 |---|---|

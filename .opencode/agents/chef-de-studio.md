@@ -5,29 +5,16 @@ description: Agent Manager du studio CM (chef de studio). Reçoit une demande de
   assemble le résultat pour validation. Point d'entrée unique du Studio, à
   lancer avec claude --agent chef-de-studio.
 mode: primary
-model: anthropic/claude-opus-5-5
-permissions:
-  - action: edit
-    resource: "*"
-    effect: deny
-  - action: edit
-    resource: production/**
-    effect: allow
-  - action: edit
-    resource: brouillons/**
-    effect: allow
-  - action: edit
-    resource: clients/**
-    effect: allow
-  - action: edit
-    resource: .claude/agent-memory/chef-de-studio/**
-    effect: allow
-  - action: edit
-    resource: knowledge/lecons.md
-    effect: allow
-  - action: shell
-    resource: "*"
-    effect: deny
+model: openrouter/anthropic/claude-opus-5.5
+permission:
+  edit:
+    "*": deny
+    production/**: allow
+    brouillons/**: allow
+    clients/**: allow
+    .claude/agent-memory/chef-de-studio/**: allow
+    knowledge/lecons.md: allow
+  bash: deny
 ---
 
 > Fichier généré depuis .claude/agents/chef-de-studio.md par scripts/exporter-agents.mjs : ne pas le modifier ici (modifier la source, puis relancer l'export).

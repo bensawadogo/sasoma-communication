@@ -3,17 +3,12 @@ description: Programmateur de publications. Met en file dans Metricool, en mode
   relecture uniquement, les posts validés par Ben. À utiliser après validation
   d'un post (porte 2).
 mode: subagent
-model: anthropic/claude-haiku-5-5
-permissions:
-  - action: edit
-    resource: "*"
-    effect: deny
-  - action: edit
-    resource: .claude/agent-memory/programmateur/**
-    effect: allow
-  - action: shell
-    resource: "*"
-    effect: deny
+model: openrouter/anthropic/claude-haiku-5.5
+permission:
+  edit:
+    "*": deny
+    .claude/agent-memory/programmateur/**: allow
+  bash: deny
 ---
 
 > Fichier généré depuis .claude/agents/programmateur.md par scripts/exporter-agents.mjs : ne pas le modifier ici (modifier la source, puis relancer l'export).

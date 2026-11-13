@@ -2,23 +2,14 @@
 description: Analyste. Prépare le bilan mensuel d'un client avec les chiffres
   réels de Metricool et Supermetrics. À utiliser en fin de mois ou de campagne.
 mode: subagent
-model: anthropic/claude-sonnet-5-5
-permissions:
-  - action: edit
-    resource: "*"
-    effect: deny
-  - action: edit
-    resource: clients/**
-    effect: allow
-  - action: edit
-    resource: production/**
-    effect: allow
-  - action: edit
-    resource: .claude/agent-memory/analyste/**
-    effect: allow
-  - action: shell
-    resource: "*"
-    effect: deny
+model: openrouter/anthropic/claude-sonnet-5.5
+permission:
+  edit:
+    "*": deny
+    clients/**: allow
+    production/**: allow
+    .claude/agent-memory/analyste/**: allow
+  bash: deny
 ---
 
 > Fichier généré depuis .claude/agents/analyste.md par scripts/exporter-agents.mjs : ne pas le modifier ici (modifier la source, puis relancer l'export).

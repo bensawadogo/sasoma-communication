@@ -3,7 +3,8 @@
 //   node scripts/exporter-agents.mjs --cible tous --profil equilibre
 //   --cible    opencode | codex | gemini | agents | tous       (agents = AGENTS.md + .agents/skills/, lus par Codex, OpenCode, Cursor, Copilot...)
 //   --profil   eco | equilibre | max                            (défaut : le profil actif de config/modeles.json)
-//   --fournisseur anthropic | openai | deepseek                 (défaut : anthropic pour opencode, openai pour codex)
+//   --fournisseur openrouter | anthropic | openai | deepseek    (défaut : openrouter pour opencode, openai pour codex)
+//   --format-opencode v1 | v2                                   (défaut v1 : OpenCode 1.x, celui installé ; v2 = nouvelle syntaxe des droits)
 //   --modele-gemini <identifiant>                               (Gemini CLI : identifiant exact copié de la page de Google ; sinon l'agent hérite)
 //   --sortie <dossier>                                          (défaut : la racine du projet)
 // Les fichiers générés portent un avertissement : on modifie la source, jamais la copie.
@@ -25,19 +26,59 @@ function ecrire(sortie, relatif, contenu) {
   return relatif;
 }
 
-/** OpenCode : .opencode/agents/<nom>.md, modèle fournisseur/modèle, droits d'écriture limités au périmètre de l'agent. */
-function opencode(agents, config, profil, fournisseur, sortie) {
+/** Droits d'écriture de l'agent, en une liste neutre : le périmètre du garde-fou (garde-fou-ecriture.mjs). */
+function droitsEcriture(nom) {
+  const regle = PERIMETRES[nom];
+  return [
+    ...(regle?.dossiers ?? []).map((d) => `${d}/**`),
+    ...(regle?.fichiers ?? []),
+    ...(regle?.rapportsDans ?? []).map((d) => `${d}/*-controle*`),
+  ];
+}
+
+/** Identifiant de modèle pour OpenCode : « openrouter/<id OpenRouter> » (porte unique, config/delegation.json), sinon « fournisseur/<id direct> ». */
+function modeleOpenCode(config, nom, profil, fournisseur) {
+  if (fournisseur === 'openrouter') {
+    const alias = config.agents[nom]?.modeles[profil]?.anthropic;
+    const delegation = JSON.parse(readFileSync(path.join(ROOT, 'config', 'delegation.json'), 'utf8'));
+    const id = delegation.modeles[alias]?.id;
+    if (!id) throw new Error(`${nom} : pas d'identifiant OpenRouter pour « ${alias} » (config/delegation.json)`);
+    return `openrouter/${id}`;
+  }
+  const id = identifiant(config, nom, profil, fournisseur);
+  return id ? `${fournisseur}/${id}` : undefined;
+}
+
+/**
+ * OpenCode : .opencode/agents/<nom>.md, droits d'écriture limités au périmètre de l'agent.
+ * format « v1 » (OpenCode 1.x, celui installé chez Ben : clé `permission`, objet motif -> action, la dernière règle gagne)
+ * ou « v2 » (clé `permissions`, liste action/resource/effect : refusée par OpenCode 1.19).
+ */
+function opencode(agents, config, profil, fournisseur, sortie, format = 'v1') {
   const fichiers = [];
   for (const a of agents) {
-    const id = identifiant(config, a.nom, profil, fournisseur);
-    const regle = PERIMETRES[a.nom];
-    const permissions = [{ action: 'edit', resource: '*', effect: 'deny' }];
-    for (const d of regle?.dossiers ?? []) permissions.push({ action: 'edit', resource: `${d}/**`, effect: 'allow' });
-    for (const f of regle?.fichiers ?? []) permissions.push({ action: 'edit', resource: f, effect: 'allow' });
-    for (const d of regle?.rapportsDans ?? []) permissions.push({ action: 'edit', resource: `${d}/*-controle*`, effect: 'allow' });
-    permissions.push({ action: 'shell', resource: '*', effect: 'deny' });
-    const fm = { description: a.fm.description, mode: a.nom === 'chef-de-studio' ? 'primary' : 'subagent', ...(id ? { model: `${fournisseur}/${id}` } : {}), permissions };
-    fichiers.push(ecrire(sortie, `.opencode/agents/${a.nom}.md`, `---\n${YAML.stringify(fm)}---\n\n${AVERTISSEMENT(a.nom)}\n\n${a.corps}\n`));
+    const model = modeleOpenCode(config, a.nom, profil, fournisseur);
+    const droits = droitsEcriture(a.nom);
+    let regles;
+    if (format === 'v2') {
+      regles = {
+        permissions: [
+          { action: 'edit', resource: '*', effect: 'deny' },
+          ...droits.map((resource) => ({ action: 'edit', resource, effect: 'allow' })),
+          { action: 'shell', resource: '*', effect: 'deny' },
+        ],
+      };
+    } else {
+      regles = { permission: { edit: { '*': 'deny', ...Object.fromEntries(droits.map((d) => [d, 'allow'])) }, bash: 'deny' } };
+    }
+    const fm = { description: a.fm.description, mode: a.nom === 'chef-de-studio' ? 'primary' : 'subagent', ...(model ? { model } : {}), ...regles };
+    fichiers.push(ecrire(sortie, `.opencode/agents/${a.nom}.md`, `---
+${YAML.stringify(fm)}---
+
+${AVERTISSEMENT(a.nom)}
+
+${a.corps}
+`));
   }
   return fichiers;
 }
@@ -79,6 +120,12 @@ function agentsMd(agents, config, profil, sortie) {
 Fichier généré par scripts/exporter-agents.mjs : ne pas le modifier ici.
 Service de community management : on propose, **Ben décide**. Contexte complet : README.md, docs/03-PROCESSUS-CM.md, clients/.
 
+## Début et fin de chaque session (tous les outils)
+1. **Lis \`ETAT-DU-PROJET.md\`** : mémoire commune du projet (qui est Ben, comment travailler avec lui, décisions prises, ce qui est fait, ce qui attend). Ben écrit en français : réponds en français.
+2. Travaille **dans le dossier du projet** ; n'ouvre rien d'autre sur l'ordinateur de Ben sans son accord. Ne lis jamais un fichier de jeton, de clé ou \`.env\`.
+3. **À la fin**, mets à jour la section « Reprise » de \`ETAT-DU-PROJET.md\` (fait, en cours, prochain pas, ce qui attend Ben), puis lance \`node scripts/relais.mjs\`. C'est ce qui permet de changer d'outil sans rien perdre.
+4. Pour confier une tâche à une autre IA, utilise l'outil \`delegue-ia\` (docs/20), jamais un envoi direct de données de client.
+
 ## L'équipe
 | Agent | Métier |
 |---|---|
@@ -96,14 +143,14 @@ ${regles.trim()}
   return fichiers;
 }
 
-export function exporter({ cible = 'tous', profil, fournisseur, modeleGemini, sortie = ROOT }) {
+export function exporter({ cible = 'tous', profil, fournisseur, modeleGemini, formatOpenCode = 'v1', sortie = ROOT }) {
   const config = chargerConfig();
   const p = profil ?? config.actif;
   if (!PROFILS.includes(p)) throw new Error(`Profil inconnu « ${p} » (${PROFILS.join(', ')})`);
   const agents = lireAgents();
   const faits = [];
   const veut = (c) => cible === 'tous' || cible === c;
-  if (veut('opencode')) faits.push(...opencode(agents, config, p, fournisseur ?? 'anthropic', sortie));
+  if (veut('opencode')) faits.push(...opencode(agents, config, p, fournisseur ?? 'openrouter', sortie, formatOpenCode));
   if (veut('codex')) faits.push(...codex(agents, config, p, fournisseur ?? 'openai', sortie));
   if (veut('gemini')) faits.push(...gemini(agents, config, p, modeleGemini, sortie));
   if (veut('agents')) faits.push(...agentsMd(agents, config, p, sortie));
@@ -117,7 +164,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     return i >= 0 ? process.argv[i + 1] : undefined;
   };
   try {
-    const faits = exporter({ cible: arg('cible'), profil: arg('profil'), fournisseur: arg('fournisseur'), modeleGemini: arg('modele-gemini'), sortie: arg('sortie') ? path.resolve(arg('sortie')) : ROOT });
+    const faits = exporter({ cible: arg('cible'), profil: arg('profil'), fournisseur: arg('fournisseur'), modeleGemini: arg('modele-gemini'), formatOpenCode: arg('format-opencode') ?? 'v1', sortie: arg('sortie') ? path.resolve(arg('sortie')) : ROOT });
     console.log(`${faits.length} fichier(s) générés :\n- ${faits.join('\n- ')}`);
   } catch (e) {
     console.error(String(e.message));

@@ -41,6 +41,10 @@ un logo ou du texte de marque dans une image/vidéo finale.
 - Rien n'est publié ou envoyé sans l'accord de Ben.
 - Assets de marque existants : logos et motion-kit dans `C:\SITE-SASOMA\brag-output\`.
 
+## Reprise et changement d'outil (13/11/2026)
+Lis `ETAT-DU-PROJET.md` au début de chaque session et mets à jour sa section « Reprise » à la fin, puis `node scripts/relais.mjs` :
+c'est la mémoire commune à tous les outils (Claude Code, OpenCode, Kilo, Codex, Gemini CLI, Hermes). Voir `docs/21-AUTONOMIE-MULTI-OUTILS.md`.
+
 ## Extension : service CM pour d'autres entreprises (12/11/2026)
 Ben veut aussi gérer les réseaux d'autres entreprises (logos animés déjà offerts) et former leurs secrétaires.
 Pas de plateforme maison, pas d'abonnement imposé. Documentation du projet : `README.md`, `TODO.md`,

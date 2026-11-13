@@ -3,23 +3,14 @@ description: Publicitaire. Écrit le brief d'une campagne payante (objectif,
   budget plafonné, mesure) et lit les chiffres publicitaires réels. À utiliser
   pour la publicité Facebook/Instagram/TikTok. Ne crée aucune campagne.
 mode: subagent
-model: anthropic/claude-sonnet-5-5
-permissions:
-  - action: edit
-    resource: "*"
-    effect: deny
-  - action: edit
-    resource: brouillons/**
-    effect: allow
-  - action: edit
-    resource: production/**
-    effect: allow
-  - action: edit
-    resource: .claude/agent-memory/publicitaire/**
-    effect: allow
-  - action: shell
-    resource: "*"
-    effect: deny
+model: openrouter/anthropic/claude-sonnet-5.5
+permission:
+  edit:
+    "*": deny
+    brouillons/**: allow
+    production/**: allow
+    .claude/agent-memory/publicitaire/**: allow
+  bash: deny
 ---
 
 > Fichier généré depuis .claude/agents/publicitaire.md par scripts/exporter-agents.mjs : ne pas le modifier ici (modifier la source, puis relancer l'export).
