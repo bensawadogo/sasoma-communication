@@ -80,13 +80,28 @@ export class QuestEngine {
     return decision;
   }
 
-  snapshot(): QuestSnapshot {
-    const players = Object.values(this.state.players)
+  /** The board as one actor may see it: everything for the chef, only their own client's missions for a scoped actor. */
+  snapshot(viewer?: Actor): QuestSnapshot {
+    const clientId = viewer?.clientId;
+    const missions: QuestState['missions'] =
+      clientId === undefined
+        ? this.state.missions
+        : Object.fromEntries(Object.entries(this.state.missions).filter(([, m]) => m.clientId === clientId));
+    let visible = Object.values(this.state.players);
+    if (clientId !== undefined) {
+      const people = new Set<string>([viewer?.id ?? '']);
+      for (const m of Object.values(missions)) {
+        people.add(m.createdBy);
+        for (const who of Object.values(m.authors)) if (who) people.add(who);
+      }
+      visible = visible.filter((p) => people.has(p.id));
+    }
+    const players = visible
       .map((p): PlayerView => {
         const { level, title, nextAt } = levelOf(p.xp);
         return { ...p, level, title, nextLevelAt: nextAt };
       })
       .sort((a, b) => b.xp - a.xp);
-    return { missions: this.state.missions, players, skippedLines: this.skipped };
+    return { missions, players, skippedLines: clientId === undefined ? this.skipped : 0 };
   }
 }

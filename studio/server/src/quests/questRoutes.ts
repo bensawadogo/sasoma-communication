@@ -27,8 +27,9 @@ export function defaultQuestFile(): string {
 
 /**
  * Extra players with their own token and a limited role, from `~/.pixel-agents/quest-actors.json`:
- * `{ "<token>": { "id": "awa", "role": "secretary" } }`. A secretary token never opens a gate (the rules say so),
- * and the role always comes from this file, never from a request.
+ * `{ "<token>": { "id": "awa", "role": "secretary", "clientId": "acme" } }`. A secretary token never opens a gate (the
+ * rules say so), is tied to ONE client company (an entry without `clientId` is ignored: no client, no access) and only
+ * sees that company's missions. The role and the client always come from this file, never from a request.
  */
 function loadExtraActors(file: string): Map<string, Actor> {
   const out = new Map<string, Actor>();
@@ -36,7 +37,10 @@ function loadExtraActors(file: string): Map<string, Actor> {
     const parsed: unknown = JSON.parse(fs.readFileSync(file, 'utf8'));
     if (typeof parsed !== 'object' || parsed === null) return out;
     for (const [token, value] of Object.entries(parsed)) {
-      const v = value as { id?: unknown; role?: unknown };
+      const v = value as { id?: unknown; role?: unknown; clientId?: unknown };
+      const scoped = typeof v.clientId === 'string' && /^[a-z0-9_-]{1,64}$/.test(v.clientId);
+      // A secretary must be tied to a client; anyone else (a studio agent) may be left unscoped.
+      if (v.role === 'secretary' && !scoped) continue;
       if (
         token.length >= 16 &&
         typeof v.id === 'string' &&
@@ -45,7 +49,7 @@ function loadExtraActors(file: string): Map<string, Actor> {
         (ROLES as readonly string[]).includes(v.role) &&
         v.role !== 'chef' // there is one chef: the holder of the server token
       ) {
-        out.set(token, { id: v.id, role: v.role as Role });
+        out.set(token, scoped ? { id: v.id, role: v.role as Role, clientId: v.clientId as string } : { id: v.id, role: v.role as Role });
       }
     }
   } catch {
@@ -173,7 +177,7 @@ export function registerQuestRoutes(app: FastifyInstance, options: QuestRouteOpt
 
   const board = (actor: Actor) => ({
     me: actor,
-    ...engine.snapshot(),
+    ...engine.snapshot(actor),
     rules: { steps: STEPS, gates: GATES, qaItems: QA_ITEMS, levels: LEVELS },
   });
 

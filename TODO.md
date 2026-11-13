@@ -56,6 +56,8 @@ Voir `docs/07-STUDIO-INTERFACE.md`.
 - [ ] **B + C** : si Ben veut aller plus loin que la 3D stylisée : personnages et meubles glTF sur mesure (modèles à créer ou acheter, licence à vérifier).
 - [x] **C** : skill commun `regles-cm` + garde-fou d'écriture par agent (8 tests) + Higgsfield en lecture pour le créateur visuel. Voir `docs/16-AGENTS-OUTILS-ET-GARDE-FOUS.md`. **Pas testé en vraie session** : relancer `lancer-manager.ps1` puis faire une mission de test.
 - [x] **C** : modèle par agent réglé (Opus : chef-de-studio et contrôleur ; Sonnet : les 9 autres) ; `node scripts/verifier-agents.mjs` contrôle les 11 agents (a trouvé et fait corriger le contrôleur, qui avait disparu à cause d'un « : » dans sa description).
+- [x] **C** : isolement entre entreprises dans le moteur de quêtes : jeton secrétaire lié à une seule entreprise (`clientId`), tests verts (34). Voir `docs/17-ACCES-A-DISTANCE-ET-PLUSIEURS-CLIENTS.md`.
+- [ ] **B** : décider l'accès (VS Code privé recommandé maintenant), si les secrétaires utilisent le Studio (recommandé : non, voie sans hébergement d'abord), et si tu as un nom de domaine à toi (`docs/17`).
 - [ ] **B** : pare-feu (commande de `docs/12`) ou tunnel VS Code (« Chemin C » de `docs/12`) pour l'iPhone.
 - [ ] **B** : entrer le code GitHub affiché pour que je pousse le projet ; **après le push, passer le dépôt en privé** (Settings > Danger Zone > Change visibility).
 - [ ] **B** : recharger le Studio (Ctrl+F5) ; lancer un agent avec le bouton + (terminal actif sur le PC seulement) ; cliquer son personnage ; dire ce qui gêne.

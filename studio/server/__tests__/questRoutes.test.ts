@@ -10,6 +10,8 @@ import { QA_ITEMS } from '../src/quests/types.js';
 
 const TOKEN = 'test-token-0123456789abcdef';
 const SECRETARY_TOKEN = 'secretary-token-0123456789';
+const OTHER_SECRETARY_TOKEN = 'other-secretary-token-012345';
+const UNSCOPED_TOKEN = 'unscoped-secretary-token-0123';
 const HOST = { host: '127.0.0.1:3100' };
 
 let dir: string;
@@ -21,7 +23,15 @@ beforeEach(async () => {
   // HOME is isolated per test run (isolateHome.setup); the extra-actors file lives under it.
   actorsFile = path.join(os.homedir(), '.pixel-agents', 'quest-actors.json');
   fs.mkdirSync(path.dirname(actorsFile), { recursive: true });
-  fs.writeFileSync(actorsFile, JSON.stringify({ [SECRETARY_TOKEN]: { id: 'awa', role: 'secretary' } }));
+  fs.writeFileSync(
+    actorsFile,
+    JSON.stringify({
+      [SECRETARY_TOKEN]: { id: 'awa', role: 'secretary', clientId: 'sasoma' },
+      [OTHER_SECRETARY_TOKEN]: { id: 'bo', role: 'secretary', clientId: 'acme' },
+      // A secretary with no client: ignored, never given the whole board.
+      [UNSCOPED_TOKEN]: { id: 'zed', role: 'secretary' },
+    }),
+  );
   app = Fastify();
   registerQuestRoutes(app, {
     token: TOKEN,
@@ -64,7 +74,7 @@ describe('access', () => {
     const chef = await app.inject({ method: 'GET', url: '/api/quests', headers: as(TOKEN) });
     expect(chef.json().me).toEqual({ id: 'ben', role: 'chef' });
     const sec = await app.inject({ method: 'GET', url: '/api/quests', headers: as(SECRETARY_TOKEN) });
-    expect(sec.json().me).toEqual({ id: 'awa', role: 'secretary' });
+    expect(sec.json().me).toEqual({ id: 'awa', role: 'secretary', clientId: 'sasoma' });
   });
 
   it('never lets a request choose its own role', async () => {
@@ -129,5 +139,39 @@ describe('parseCommand', () => {
   });
   it('refuses a step that is not a step', () => {
     expect(parseCommand({ type: 'reject_gate', missionId: 'm1', gate: 'idea', reason: 'x' })).toBeNull();
+  });
+});
+
+describe('one company never sees another', () => {
+  const create = (token: string, missionId: string, clientId: string) =>
+    post(token, { type: 'create_mission', missionId, clientId, title: `Mission ${missionId}` });
+
+  it('shows a secretary only her own company missions and people; the chef sees all', async () => {
+    expect((await create(SECRETARY_TOKEN, 'm-sasoma', 'sasoma')).statusCode).toBe(200);
+    expect((await create(OTHER_SECRETARY_TOKEN, 'm-acme', 'acme')).statusCode).toBe(200);
+    const mine = (await app.inject({ method: 'GET', url: '/api/quests', headers: as(SECRETARY_TOKEN) })).json();
+    expect(Object.keys(mine.missions)).toEqual(['m-sasoma']);
+    expect(mine.players.map((p: { id: string }) => p.id)).toEqual(['awa']);
+    const theirs = (await app.inject({ method: 'GET', url: '/api/quests', headers: as(OTHER_SECRETARY_TOKEN) })).json();
+    expect(Object.keys(theirs.missions)).toEqual(['m-acme']);
+    const chef = (await app.inject({ method: 'GET', url: '/api/quests', headers: as(TOKEN) })).json();
+    expect(Object.keys(chef.missions).sort()).toEqual(['m-acme', 'm-sasoma']);
+  });
+
+  it('refuses a mission for another company, and answers not found for a mission of another company', async () => {
+    const other = await create(SECRETARY_TOKEN, 'm-x', 'acme');
+    expect(other.statusCode).toBe(422);
+    expect(other.json().rule).toBe('OTHER_CLIENT');
+    await create(OTHER_SECRETARY_TOKEN, 'm-acme', 'acme');
+    const poke = await post(SECRETARY_TOKEN, { type: 'complete_step', missionId: 'm-acme', step: 'idea' });
+    expect(poke.statusCode).toBe(422);
+    expect(poke.json().rule).toBe('UNKNOWN_MISSION');
+    // The chef still works on any company.
+    expect((await post(TOKEN, { type: 'complete_step', missionId: 'm-acme', step: 'idea' })).statusCode).toBe(200);
+  });
+
+  it('ignores a secretary token that names no company', async () => {
+    const res = await app.inject({ method: 'GET', url: '/api/quests', headers: as(UNSCOPED_TOKEN) });
+    expect(res.statusCode).toBe(401);
   });
 });

@@ -66,6 +66,18 @@ function refuse(rule: RuleId, message: string): Decision {
 // ── Decide: command -> event, or a refusal with the rule that applies ─────────
 
 export function decide(state: QuestState, command: QuestCommand, actor: Actor, at: number): Decision {
+  // An actor tied to a client company never touches another company's missions. A mission of another client is
+  // answered exactly like one that does not exist, so its existence is not revealed.
+  if (actor.clientId !== undefined) {
+    if (command.type === 'create_mission') {
+      if (command.clientId.trim() !== actor.clientId) {
+        return refuse('OTHER_CLIENT', 'Tu ne peux créer des missions que pour ton entreprise.');
+      }
+    } else {
+      const target = state.missions[command.missionId];
+      if (target && target.clientId !== actor.clientId) return refuse('UNKNOWN_MISSION', 'Mission introuvable.');
+    }
+  }
   switch (command.type) {
     case 'create_mission': {
       if (state.missions[command.missionId]) {

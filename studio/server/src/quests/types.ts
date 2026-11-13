@@ -10,6 +10,11 @@ export type Role = 'chef' | 'secretary' | 'agent';
 export interface Actor {
   readonly id: string;
   readonly role: Role;
+  /**
+   * The one client company this actor works for. A secretary always has one and can only see and act on that client's
+   * missions; the chef and the studio's own AI agents have none and see everything.
+   */
+  readonly clientId?: string;
 }
 
 /** The seven steps of one publication (a "mission"), in order. Three of them are gates only the chef can pass. */
@@ -130,6 +135,7 @@ export type RuleId =
   | 'EMPTY_FIELD'
   | 'WRONG_ORDER'
   | 'ROLE_NOT_ALLOWED'
+  | 'OTHER_CLIENT'
   | 'NO_AI_PRODUCT'
   | 'NO_REAL_PHOTO'
   | 'COST_NOT_ANNOUNCED'
