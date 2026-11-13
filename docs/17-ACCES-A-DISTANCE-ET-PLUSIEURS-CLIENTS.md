@@ -19,6 +19,8 @@ Avant : un jeton secrétaire voyait **toutes** les missions de **tous** les clie
 Exemple : `{ "<jeton-long-et-secret>": { "id": "awa", "role": "secretary", "clientId": "sasoma" } }`.
 
 ## Le lien de Ben (le Studio, de n'importe où)
+Comparatif détaillé et à jour (ngrok, Cloudflare, Tailscale, zrok…) : `docs/18-TUNNELS-COMPARATIF.md`. **Correction** : Tailscale gratuit est réservé à un usage non commercial (page officielle de Tailscale) : pas pour l'activité de Ben sans payer.
+
 | Moyen | État de la vérification | À savoir |
 |---|---|---|
 | **Port relayé par VS Code, visibilité Private** | Documentation officielle lue (`docs/12`, chemin C) | Seul le compte GitHub de Ben y accède ; il faut que VS Code reste ouvert sur le PC ; débit limité ; pas testé sur iPhone |

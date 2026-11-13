@@ -41,6 +41,7 @@ Définition de travail (à valider par Ben, voir `docs/05-VERIFICATIONS-ET-HYPOT
 | `studio/` | Copie locale de pixel-agents (MIT), à installer et personnaliser |
 | `docs/11-ORGANISATION-DE-L-EQUIPE.md` | Organigramme des 11 agents, outils réels, flux de travail, règles d'équipe |
 | `docs/12-TEST-IPHONE.md` + `lancer-studio.ps1` | Tester le Studio sur iPhone (Wi-Fi ou Tailscale) et script de lancement |
+| `docs/18-TUNNELS-COMPARATIF.md` | ngrok, Cloudflare, Tailscale, VS Code, zrok : limites officielles, usage commercial, recommandation |
 | `docs/17-ACCES-A-DISTANCE-ET-PLUSIEURS-CLIENTS.md` | Accès de Ben de partout, secrétaires de plusieurs entreprises isolées entre elles, options Tailscale/Cloudflare/VS Code |
 | `docs/16-AGENTS-OUTILS-ET-GARDE-FOUS.md` | Quel outil est branché à quel agent, ce qui spécialise chaque agent, garde-fous testés ou non, choix du modèle par agent |
 | `docs/15-STUDIO-3D.md` | Le Studio en 3D : agents visibles, bureaux, salon où ils vont quand ils ont fini, limites et honnêteté sur le « AAA » |

@@ -5,7 +5,8 @@ import type { SubagentCharacter } from '../hooks/useExtensionMessages.js';
 import type { ToolActivity } from '../office/types.js';
 import type { StudioActor } from './Studio3D.js';
 
-const ROSTER_POLL_MS = 4000;
+// Names change rarely: look every 8 s, and not at all while the page is hidden (a metered tunnel counts every request).
+const ROSTER_POLL_MS = 8000;
 
 /** Display names of the agents, refreshed while the 3D office is on screen. */
 function useRosterNames(active: boolean): ReadonlyMap<number, string> {
@@ -16,7 +17,7 @@ function useRosterNames(active: boolean): ReadonlyMap<number, string> {
     let timer = 0;
     const tick = async () => {
       try {
-        const roster = await fetchRoster(controller.signal);
+        const roster = document.hidden ? null : await fetchRoster(controller.signal);
         if (roster && !controller.signal.aborted) setNames(new Map(roster.map((r) => [r.agentId, r.name])));
       } catch {
         // Offline or aborted: the next tick tries again.
