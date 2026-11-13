@@ -29,7 +29,7 @@ test('OpenCode (1.x) : un agent par fichier, modèle OpenRouter du profil, droit
   try {
     exporter({ cible: 'opencode', profil: 'max', sortie });
     const dir = path.join(sortie, '.opencode', 'agents');
-    assert.equal(readdirSync(dir).length, 13);
+    assert.equal(readdirSync(dir).length, 14);
     const chef = frontmatter(path.join(dir, 'chef-de-studio.md'));
     assert.equal(chef.mode, 'primary');
     assert.equal(chef.model, 'openrouter/anthropic/claude-fable-5.2');
@@ -72,7 +72,7 @@ test('Codex : TOML avec nom, description, modèle OpenAI et instructions', () =>
     assert.match(t, /^developer_instructions = '''/m);
     const prog = readFileSync(path.join(sortie, '.codex', 'agents', 'programmateur.toml'), 'utf8');
     assert.match(prog, /^model = "gpt-6-luna"$/m);
-    assert.equal(readdirSync(path.join(sortie, '.codex', 'agents')).length, 13);
+    assert.equal(readdirSync(path.join(sortie, '.codex', 'agents')).length, 14);
   } finally {
     rmSync(sortie, { recursive: true, force: true });
   }

@@ -42,6 +42,7 @@ Définition de travail (à valider par Ben, voir `docs/05-VERIFICATIONS-ET-HYPOT
 | `docs/11-ORGANISATION-DE-L-EQUIPE.md` | Organigramme des 11 agents, outils réels, flux de travail, règles d'équipe |
 | `docs/12-TEST-IPHONE.md` + `lancer-studio.ps1` | Tester le Studio sur iPhone (Wi-Fi ou Tailscale) et script de lancement |
 | `docs/22-META-ADS-ET-PIXELS.md` | Meta Ads (serveur MCP officiel, bêta), agent `traceur` pour les pixels sur mesure, ce que Ben connecte |
+| `knowledge/andromeda-meta.md` | Andromeda (Meta) : ce que Meta écrit, avis de praticiens, inconnus ; base de l'agent `andromeda` |
 | `docs/21-AUTONOMIE-MULTI-OUTILS.md` | Continuer sans abonnement Claude : OpenCode, Kilo, Codex, Gemini CLI, Hermes ; mémoire commune `ETAT-DU-PROJET.md` ; sécurité de l'ordinateur |
 | `docs/20-DELEGUE-IA-OPENROUTER.md` | Serveur MCP `delegue-ia` : faire travailler d'autres IA via OpenRouter (classe des données, nettoyage, plafonds, ce que Ben doit faire) |
 | `docs/19-MODELES-BENCHMARKS-ET-ECONOMIE.md` | Benchmarks lus (Arena, Artificial Analysis, Vectara...), prix officiels, modèle de chaque agent, export vers OpenCode/Codex/Gemini CLI, économie, confidentialité |

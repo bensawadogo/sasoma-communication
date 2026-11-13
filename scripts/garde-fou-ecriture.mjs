@@ -18,6 +18,8 @@ export const PERIMETRES = {
   },
   // L'inspirateur n'écrit que ses carnets d'inspiration (mots-clés, grille de tri, direction de l'histoire).
   inspirateur: { dossiers: ['production/inspirations', memoire('inspirateur')] },
+  // Le spécialiste Andromeda n'écrit que ses plans de diversité et audits de campagne.
+  andromeda: { dossiers: ['production/andromeda', memoire('andromeda')] },
   veilleur: { dossiers: ['recherches', 'knowledge', memoire('veilleur')] },
   stratege: { dossiers: ['brouillons', 'production', memoire('stratege')] },
   scenariste: { dossiers: ['brouillons', 'production', memoire('scenariste')] },

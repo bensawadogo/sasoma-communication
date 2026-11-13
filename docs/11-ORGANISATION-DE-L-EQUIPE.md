@@ -1,6 +1,6 @@
 # 11. Organisation de l'équipe d'agents
 
-Mise à jour du 12/11/2026. L'équipe compte 13 agents dans `.claude/agents/`. **Ben décide, le chef-de-studio coordonne, les spécialistes exécutent.**
+Mise à jour du 12/11/2026. L'équipe compte 14 agents dans `.claude/agents/`. **Ben décide, le chef-de-studio coordonne, les spécialistes exécutent.**
 Les définitions sont lues au démarrage : lancer avec `claude --agent chef-de-studio` pour que tout (outils et mémoire) soit actif.
 
 ## 1. Organigramme
@@ -20,7 +20,7 @@ Les définitions sont lues au démarrage : lancer avec `claude --agent chef-de-s
 
 | Agent | Rôle en une phrase | Outils réels | Ce qu'il ne peut pas faire |
 |---|---|---|---|
-| **chef-de-studio** | Reçoit un thème, délègue, assemble, présente à Ben | Délégation aux 12 spécialistes, fichiers du projet | Publier, envoyer, valider à la place de Ben |
+| **chef-de-studio** | Reçoit un thème, délègue, assemble, présente à Ben | Délégation aux 13 spécialistes, fichiers du projet | Publier, envoyer, valider à la place de Ben |
 | **veilleur** | Vérifie les faits, suit plateformes et marché, source tout | Recherche web, Firecrawl, fichiers | Contacter, acheter, créer un compte |
 | **stratege** | Idées, calendrier, heures | Web, Metricool (lecture), fichiers | Publier |
 | **scenariste** | Scénarios, légendes, mots-clés | Fichiers | Générer, publier |
@@ -28,6 +28,7 @@ Les définitions sont lues au démarrage : lancer avec `claude --agent chef-de-s
 | **controleur** | Pré-contrôle de la porte 2 (9 points, sources) | Fichiers | Valider, corriger, publier |
 | **programmateur** | Met en file dans Metricool **en relecture** | Metricool : création en relecture, lecture | Publication directe, modification |
 | **inspirateur** | Mots-clés Pinterest, tri de vraies références professionnelles, direction de l'histoire (`production/inspirations/<client>/`) | Fichiers, web public (lecture), images que Ben rapporte | Parcourir Pinterest automatiquement, copier une image, générer un produit ou un logo |
+| **andromeda** | Règles de diffusion Meta (Andromeda) : plan de diversité créative, audit d'un lot de créations, structure et rythme de test (`production/andromeda/<client>/`) ; source : `knowledge/andromeda-meta.md` | Fichiers, pages officielles de Meta (lecture) | Créer ou activer quoi que ce soit chez Meta, générer des images pour faire du volume, inventer un seuil |
 | **traceur** | Plan de suivi et kit de pixel Meta sur mesure par client (fichiers dans `production/pixels/<client>/`) | Fichiers, pages officielles de Meta (lecture) | Créer quoi que ce soit chez Meta, installer sur un site, envoyer |
 | **publicitaire** | Brief de campagne, lecture des chiffres pub | Supermetrics (lecture), fichiers | Créer ou modifier une campagne |
 | **analyste** | Bilan mensuel avec chiffres réels | Metricool et Supermetrics (lecture), fichiers | Écrire sur les comptes |

@@ -75,6 +75,13 @@ test('le traceur écrit ses kits de pixel, et rien d\'autre (ni le site d\'un cl
   assert.equal(decider('formateur', p('production/pixels/sasoma/pixel-base.html')).ok, false);
 });
 
+test("le spécialiste Andromeda écrit ses plans de diversité, et rien d'autre", () => {
+  assert.equal(decider('andromeda', p('production/andromeda/sasoma/lancement.md')).ok, true);
+  assert.equal(decider('andromeda', p('production/plans/x.md')).ok, false);
+  assert.equal(decider('andromeda', p('knowledge/andromeda-meta.md')).ok, false);
+  assert.equal(decider('andromeda', p('clients/sasoma.md')).ok, false);
+});
+
 test("l'inspirateur écrit ses carnets d'inspiration, et rien d'autre", () => {
   assert.equal(decider('inspirateur', p('production/inspirations/sasoma/chaleur.md')).ok, true);
   assert.equal(decider('inspirateur', p('production/plans/x.md')).ok, false);

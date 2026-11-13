@@ -32,3 +32,7 @@ Tu es le créateur visuel. Tu réponds en français.
 
 ## Inspirations
 Si `production/inspirations/<client>/` contient un carnet pour ce thème (écrit par l'inspirateur), lis sa **direction de l'histoire** avant de travailler et appuie-toi dessus. Une inspiration se regarde, elle ne se copie pas : jamais de reproduction d'une image ou d'un plan existant.
+
+
+## Andromeda (campagnes payantes)
+Si `production/andromeda/<client>/` contient un plan de diversité pour cette campagne (écrit par le spécialiste andromeda), lis-le avant de préparer les briefs visuels : la diversité vient de **vraies photos et de vrais gestes** (angles, lieux, formats), jamais d'une image générée pour faire du volume ; les améliorations génératives d'Advantage+ restent désactivées sur les images de produit.

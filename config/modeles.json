@@ -424,6 +424,28 @@
           "openai": "sol"
         }
       }
+    },
+    "andromeda": {
+      "metier": "Règles de diffusion Meta (Andromeda) : plan de diversité créative, audit d'un lot de créations, structure et rythme de test.",
+      "critere": "Rigueur sur les sources (Meta / tiers / inconnu), jugement sur la vraie diversité, aucune invention de seuil.",
+      "benchmarks": [
+        "Vectara HHEM (fidélité à la source)",
+        "test maison : audit d'un lot de créations factice (evals/, à écrire)"
+      ],
+      "modeles": {
+        "eco": {
+          "anthropic": "sonnet",
+          "openai": "terra"
+        },
+        "equilibre": {
+          "anthropic": "sonnet",
+          "openai": "terra"
+        },
+        "max": {
+          "anthropic": "opus",
+          "openai": "sol"
+        }
+      }
     }
   }
 }

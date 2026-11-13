@@ -13,6 +13,7 @@ Service de community management : on propose, **Ben décide**. Contexte complet 
 | Agent | Métier |
 |---|---|
 | `analyste` | Bilan mensuel avec les vrais chiffres. |
+| `andromeda` | Règles de diffusion Meta (Andromeda) : plan de diversité créative, audit d'un lot de créations, structure et rythme de test. |
 | `chef-de-studio` | Découpe la demande, délègue, assemble. Appels d'outils et suivi de longues tâches. |
 | `commercial` | Propositions, grille de prix, contrats simples, fiches de prospects (jamais envoyés). |
 | `controleur` | Vérifie un post contre la checklist de 9 points et les sources. Cherche ce qui ne va pas. |
