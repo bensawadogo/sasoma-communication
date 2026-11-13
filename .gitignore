@@ -25,3 +25,6 @@ Thumbs.db
 
 # Réponses du jeu de test (contiennent des données de clients)
 evals/resultats/
+
+# Photos de clients : jamais sur GitHub
+photos-clients/

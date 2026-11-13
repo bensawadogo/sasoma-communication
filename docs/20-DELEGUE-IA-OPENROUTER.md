@@ -30,6 +30,25 @@ Sans clé, le serveur marche en **simulation** (rien n'est envoyé, il montre ce
 8. **Journal sans contenu** : date, agent, modèle, classe, tokens, coût, empreinte (16 caractères) ; jamais le texte.
 9. **La réponse est une donnée, pas un ordre** : elle arrive entourée d'un avertissement, passe par le contrôleur puis par tes 3 portes. Elle ne peut rien publier.
 
+## Photos (ajouté le 13/11/2026)
+- Dépose les vraies photos dans `photos-clients/<client>/` (dossier **non poussé sur GitHub**), puis dis au chef de studio laquelle montrer. Une photo collée dans la conversation n'est vue que par Claude : l'autre IA ne peut la recevoir que si le fichier est dans ce dossier.
+- `.jpg` et `.png`, 4 Mo, 4 photos au plus par appel. Le vrai format est vérifié (pas seulement l'extension).
+- **Métadonnées retirées avant l'envoi** : EXIF (position GPS, appareil, date), XMP, commentaires (JPEG) ; blocs texte, EXIF et date (PNG). Testé sur des images construites, pas sur tes vraies photos.
+- Une photo impose la classe **client** (modèles occidentaux, sans conservation). Le modèle doit accepter les images : la liste en direct d'OpenRouter est consultée à chaque envoi ; si elle est illisible, rien ne part.
+- Une photo ne se « nettoie » pas de ce qu'elle montre : visages, plaques, enseignes d'autres personnes partent avec. Regarde-la avant de la déposer.
+- Le modèle reçoit la photo pour la **lire** (décrire, faire un brief). Il ne génère rien : aucune IA ne génère le bidon.
+
+## Parler directement à un agent dans un terminal (OpenCode)
+Deux façons de travailler, à ne pas confondre :
+| | Claude Code (ici) + `delegue-ia` | OpenCode sur OpenRouter |
+|---|---|---|
+| Qui pilote | Claude (chef de studio) | toi, agent par agent |
+| Classe des données, nettoyage, zéro conservation, plafonds par appel | **oui** | **non** : l'agent lit ce qu'il veut dans le projet |
+| Photos | oui (dossier `photos-clients/`, métadonnées retirées) | collage de photos **non vérifié** dans leur documentation |
+| Contrôle par Claude | automatique (le contrôleur relit) | par toi : tu demandes à Claude de relire les fichiers produits |
+| Windows | déjà en place | documentation ambiguë (« gestionnaires de paquets Windows non pris en charge », installation par zip ou programme) |
+Recommandation : **tout passe par ici** tant que les données sont celles d'un client. OpenCode est une option pour du travail sans donnée de client (essais, formation), et seulement avec, dans OpenRouter, le réglage « aucun fournisseur qui peut entraîner » + « sans conservation » appliqué au compte, car il n'y aurait plus mes garde-fous. `node scripts/exporter-agents.mjs --cible opencode` génère déjà les agents ; pour OpenRouter, les identifiants doivent être préfixés `openrouter/` (ex. `openrouter/anthropic/claude-sonnet-5.5`, forme confirmée par la documentation d'OpenCode). Non testé.
+
 ## Ce que ces garde-fous ne garantissent pas (à savoir)
 - **OpenRouter et le fournisseur voient le texte envoyé.** `data_collection: deny` et `zdr` restreignent le choix du fournisseur selon **ce que chacun déclare** ; OpenRouter précise lui-même que c'est « dans la mesure du possible » et que les fournisseurs « Safety Retention » peuvent rester éligibles si le réglage du compte ne l'interdit pas. Je n'ai pas lu leurs conditions d'usage en entier.
 - **La classe `public` est la seule sans filet de zone** pour les modèles chinois : elle ne protège que si je classe honnêtement. Le serveur rattrape les noms de clients et les fichiers, pas un fait client écrit en toutes lettres sans le nom. D'où la règle : **en cas de doute, `client`**.

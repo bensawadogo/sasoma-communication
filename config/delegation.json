@@ -23,6 +23,14 @@
     "taille_max_octets": 60000,
     "total_max_octets": 200000
   },
+  "images": {
+    "_commentaire": "Photos : seulement dans photos-clients/ (dossier non poussé sur GitHub). Toute photo impose la classe client. Les métadonnées (EXIF, position GPS, appareil) sont retirées avant l'envoi.",
+    "dossier": "photos-clients",
+    "extensions": [".jpg", ".jpeg", ".png"],
+    "taille_max_octets": 4000000,
+    "max_par_appel": 4,
+    "tokens_par_image_estimes": 2000
+  },
   "detection": {
     "_commentaire": "Mots qui font passer un texte en classe client, en plus des noms de fiches dans clients/ (sasoma, etc.).",
     "mots_en_plus": ["petrov", "petrovoll"]

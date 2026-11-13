@@ -33,13 +33,16 @@ function contexte(root, { cle = null, reponse, appels = [], plafonds = {} } = {}
   reinitialiserCachePrix();
   return {
     root,
-    cfg: { ...cfgReelle, plafonds: { ...cfgReelle.plafonds, ...plafonds } },
+    cfg: { ...cfgReelle, plafonds: { ...cfgReelle.plafonds, ...plafonds }, modeles: { ...cfgReelle.modeles, texte: { id: 'x/texte-seul', zone: 'occidentale', prix_ref: [1, 1] } } },
     env: cle ? { OPENROUTER_API_KEY: cle } : {},
     base: 'https://exemple.test/api/v1',
     maintenant: () => new Date('2026-11-13T10:00:00Z'),
     fetch: async (url, opts) => {
       appels.push({ url, opts });
-      if (url.endsWith('/models')) return { ok: true, status: 200, json: async () => ({ data: [] }) };
+      if (url.endsWith('/models')) {
+        const voit = (id) => ({ id, pricing: { prompt: '0.000002', completion: '0.00001' }, architecture: { input_modalities: ['text', 'image'] } });
+        return { ok: true, status: 200, json: async () => ({ data: [voit('openai/gpt-6.1-sol'), voit('anthropic/claude-sonnet-5.5'), { id: 'x/texte-seul', pricing: { prompt: '0.000001', completion: '0.000001' }, architecture: { input_modalities: ['text'] } }] }) };
+      }
       if (url.endsWith('/key')) return { ok: true, status: 200, json: async () => ({ data: { limit: 5, limit_remaining: 4.5, usage_daily: 0.1, usage_monthly: 0.5 } }) };
       return reponse ?? { ok: true, status: 200, json: async () => ({ choices: [{ message: { content: 'Texte rendu' }, finish_reason: 'stop' }], usage: { prompt_tokens: 100, completion_tokens: 20, cost: 0.0012 }, provider: 'FournisseurTest' }) };
     },
@@ -144,6 +147,49 @@ test('fichiers : production, code, jetons, racine, hors projet, extensions refus
     await refus(preparer({ ...base, alias: 'sol', donnees: 'client', fichiers: ['docs/absent.md'] }, contexte(root)), 'FICHIER_REFUSE');
     writeFileSync(path.join(root, 'docs', 'gros.md'), 'x'.repeat(70_000));
     await refus(preparer({ ...base, alias: 'sol', donnees: 'client', fichiers: ['docs/gros.md'] }, contexte(root)), 'FICHIER_REFUSE');
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('photos : métadonnées retirées, dossier imposé, classe client, modèle qui voit les images', async () => {
+  const root = projet();
+  try {
+    const jpeg = Buffer.concat([
+      Buffer.from([0xff, 0xd8]),
+      Buffer.from([0xff, 0xe1, 0x00, 0x12]), Buffer.from('Exif\0\0GPS-12.3,-1.5'), // EXIF avec position
+      Buffer.from([0xff, 0xdb, 0x00, 0x04, 0x01, 0x02]),
+      Buffer.from([0xff, 0xda, 0x00, 0x04, 0x03, 0x04, 0x99, 0x98, 0xff, 0xd9]),
+    ]);
+    const bloc = (type, data) => {
+      const l = Buffer.alloc(4);
+      l.writeUInt32BE(data.length);
+      return Buffer.concat([l, Buffer.from(type, 'latin1'), data, Buffer.alloc(4)]);
+    };
+    const png = Buffer.concat([Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]), bloc('IHDR', Buffer.alloc(13)), bloc('tEXt', Buffer.from('GPS=12.3')), bloc('IDAT', Buffer.from('pixels')), bloc('IEND', Buffer.alloc(0))]);
+    mkdirSync(path.join(root, 'photos-clients', 'sasoma'), { recursive: true });
+    writeFileSync(path.join(root, 'photos-clients', 'sasoma', 'bidon.jpg'), jpeg);
+    writeFileSync(path.join(root, 'photos-clients', 'sasoma', 'bidon.png'), png);
+    writeFileSync(path.join(root, 'photos-clients', 'sasoma', 'faux.jpg'), Buffer.from('pas une image'));
+    writeFileSync(path.join(root, 'docs', 'hors.jpg'), jpeg);
+
+    const p = await preparer({ ...base, alias: 'sol', donnees: 'public', images: ['photos-clients/sasoma/bidon.jpg', 'photos-clients/sasoma/bidon.png'] }, contexte(root));
+    assert.equal(p.classe, 'client', 'une photo impose la classe client');
+    const parts = p.messages[1].content;
+    assert.equal(parts[0].type, 'text');
+    assert.equal(parts.filter((x) => x.type === 'image_url').length, 2);
+    const dec = parts.filter((x) => x.type === 'image_url').map((x) => Buffer.from(x.image_url.url.split(',')[1], 'base64'));
+    for (const b of dec) assert.ok(!b.includes('GPS'), 'les métadonnées sont retirées');
+    assert.ok(dec[0].subarray(0, 2).equals(Buffer.from([0xff, 0xd8])) && dec[0].subarray(-2).equals(Buffer.from([0xff, 0xd9])), 'JPEG intact');
+    assert.ok(dec[1].includes('IDAT') && dec[1].includes('IEND'), 'PNG intact');
+    assert.match(await estimer({ ...base, alias: 'sol', donnees: 'client', images: ['photos-clients/sasoma/bidon.jpg'] }, contexte(root)), /Photos envoyées/);
+
+    await refus(preparer({ ...base, alias: 'sol', images: ['docs/hors.jpg'] }, contexte(root)), 'IMAGE_REFUSEE');
+    await refus(preparer({ ...base, alias: 'sol', images: ['photos-clients/sasoma/faux.jpg'] }, contexte(root)), 'IMAGE_REFUSEE');
+    await refus(preparer({ ...base, alias: 'sol', images: ['photos-clients/absente.jpg'] }, contexte(root)), 'IMAGE_REFUSEE');
+    await refus(preparer({ ...base, alias: 'sol', images: ['../x.jpg'] }, contexte(root)), 'IMAGE_REFUSEE');
+    await refus(preparer({ ...base, alias: 'texte', images: ['photos-clients/sasoma/bidon.jpg'] }, contexte(root)), 'IMAGE_NON_SUPPORTEE');
+    await refus(preparer({ ...base, alias: 'kimi', images: ['photos-clients/sasoma/bidon.jpg'] }, contexte(root)), 'ZONE_REFUSEE');
   } finally {
     rmSync(root, { recursive: true, force: true });
   }

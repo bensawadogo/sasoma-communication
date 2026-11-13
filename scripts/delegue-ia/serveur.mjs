@@ -14,6 +14,7 @@ const entree = {
   tache: { type: 'string', description: 'Ce que le modèle doit produire.' },
   contexte: { type: 'string', description: 'Texte utile à la tâche (sera nettoyé : clés, e-mails, téléphones masqués).' },
   fichiers: { type: 'array', items: { type: 'string' }, description: 'Chemins relatifs au projet (clients/, knowledge/, brouillons/, docs/, recherches/, evals/, config/ seulement). Lus par le serveur.' },
+  images: { type: 'array', items: { type: 'string' }, description: "Photos à montrer au modèle : chemins dans photos-clients/ (.jpg .png, 4 Mo, 4 maximum). Classe client imposée, métadonnées retirées. Modèles qui voient les images : haiku, sonnet, opus, luna, terra, sol, hydrogen, carbon, argon." },
   max_tokens: { type: 'integer', description: 'Longueur maximale de la réponse (défaut 3000, plafonné).' },
   temperature: { type: 'number', description: 'Facultatif, entre 0 et 1,5.' },
 };

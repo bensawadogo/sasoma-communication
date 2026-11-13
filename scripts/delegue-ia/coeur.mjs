@@ -146,7 +146,7 @@ function ecrireJournal(root, entree) {
 }
 
 // ---------------------------------------------------------------- prix en direct
-let cachePrix = { t: 0, prix: new Map() };
+let cachePrix = { t: 0, prix: new Map(), modalites: new Map() };
 
 export async function prixEnDirect(ctx) {
   if (Date.now() - cachePrix.t < 3600_000 && cachePrix.prix.size) return cachePrix.prix;
@@ -155,21 +155,101 @@ export async function prixEnDirect(ctx) {
     if (!r.ok) return new Map();
     const j = await r.json();
     const prix = new Map();
+    const modalites = new Map();
     for (const m of j.data ?? []) {
       const p = Number(m.pricing?.prompt) * 1e6;
       const c = Number(m.pricing?.completion) * 1e6;
       if (Number.isFinite(p) && Number.isFinite(c)) prix.set(m.id, [p, c]);
+      if (Array.isArray(m.architecture?.input_modalities)) modalites.set(m.id, m.architecture.input_modalities);
     }
-    cachePrix = { t: Date.now(), prix };
+    cachePrix = { t: Date.now(), prix, modalites };
     return prix;
   } catch {
     return new Map();
   }
 }
 
+/** Ce que chaque modèle accepte en entrée (« text », « image »...), d'après la liste en direct. Vide si la liste est illisible. */
+export async function modalitesEnDirect(ctx) {
+  await prixEnDirect(ctx);
+  return cachePrix.modalites;
+}
+
 export const reinitialiserCachePrix = () => {
-  cachePrix = { t: 0, prix: new Map() };
+  cachePrix = { t: 0, prix: new Map(), modalites: new Map() };
 };
+
+// ---------------------------------------------------------------- photos
+const SIGNATURES = { '.jpg': [0xff, 0xd8, 0xff], '.jpeg': [0xff, 0xd8, 0xff], '.png': [0x89, 0x50, 0x4e, 0x47] };
+
+/** JPEG : retire les segments de métadonnées (EXIF avec position GPS et appareil, XMP, commentaires), garde l'image. */
+export function nettoyerJpeg(buf) {
+  const sortie = [buf.subarray(0, 2)];
+  let i = 2;
+  while (i + 4 <= buf.length) {
+    if (buf[i] !== 0xff) break;
+    const marqueur = buf[i + 1];
+    if (marqueur === 0xff) {
+      i += 1;
+      continue;
+    }
+    if (marqueur === 0xda) break; // début des données de l'image : tout le reste est gardé
+    if (marqueur === 0xd9 || (marqueur >= 0xd0 && marqueur <= 0xd8) || marqueur === 0x01) {
+      sortie.push(buf.subarray(i, i + 2));
+      i += 2;
+      continue;
+    }
+    const longueur = buf.readUInt16BE(i + 2);
+    const metadonnee = (marqueur >= 0xe1 && marqueur <= 0xef && marqueur !== 0xee) || marqueur === 0xfe;
+    if (!metadonnee) sortie.push(buf.subarray(i, i + 2 + longueur));
+    i += 2 + longueur;
+  }
+  sortie.push(buf.subarray(i));
+  return Buffer.concat(sortie);
+}
+
+/** PNG : retire les blocs de texte, EXIF et date ; garde l'image. */
+export function nettoyerPng(buf) {
+  const sortie = [buf.subarray(0, 8)];
+  const retirer = new Set(['tEXt', 'iTXt', 'zTXt', 'eXIf', 'tIME']);
+  let i = 8;
+  while (i + 12 <= buf.length) {
+    const longueur = buf.readUInt32BE(i);
+    const type = buf.toString('latin1', i + 4, i + 8);
+    const fin = i + 12 + longueur;
+    if (!retirer.has(type)) sortie.push(buf.subarray(i, Math.min(fin, buf.length)));
+    i = fin;
+  }
+  return Buffer.concat(sortie);
+}
+
+/** Lit des photos dans le seul dossier prévu, vérifie le vrai format, retire les métadonnées. */
+export function lireImages(liste, cfg, root = ROOT) {
+  const c = cfg.images;
+  const lues = [];
+  if (!liste?.length) return lues;
+  if (liste.length > c.max_par_appel) throw new ErreurDelegation('IMAGE_REFUSEE', `Trop de photos (maximum ${c.max_par_appel}).`);
+  const racine = realpathSync(root);
+  for (const brut of liste) {
+    if (typeof brut !== 'string' || !brut || brut.includes('\0')) throw new ErreurDelegation('IMAGE_REFUSEE', 'Chemin de photo invalide.');
+    const abs = path.resolve(root, brut);
+    const rel = path.relative(path.resolve(root), abs).split(path.sep).join('/');
+    if (!rel || rel.startsWith('..') || path.isAbsolute(rel) || rel.split('/')[0] !== c.dossier || rel.split('/').length < 2) {
+      throw new ErreurDelegation('IMAGE_REFUSEE', `Photo hors du dossier ${c.dossier}/ : ${brut}`);
+    }
+    if (!existsSync(abs) || !statSync(abs).isFile()) throw new ErreurDelegation('IMAGE_REFUSEE', `Photo introuvable : ${rel}`);
+    const vrai = path.relative(racine, realpathSync(abs)).split(path.sep).join('/');
+    if (vrai.split('/')[0] !== c.dossier) throw new ErreurDelegation('IMAGE_REFUSEE', `Photo hors du dossier ${c.dossier}/ (lien) : ${rel}`);
+    const ext = path.extname(vrai).toLowerCase();
+    if (!c.extensions.includes(ext)) throw new ErreurDelegation('IMAGE_REFUSEE', `Format non accepté (${c.extensions.join(', ')}) : ${rel}`);
+    if (statSync(abs).size > c.taille_max_octets) throw new ErreurDelegation('IMAGE_REFUSEE', `Photo trop lourde (maximum ${Math.round(c.taille_max_octets / 1e6)} Mo) : ${rel}`);
+    const brutBuf = readFileSync(abs);
+    if (!SIGNATURES[ext].every((o, k) => brutBuf[k] === o)) throw new ErreurDelegation('IMAGE_REFUSEE', `Le contenu ne correspond pas au format ${ext} : ${rel}`);
+    const nette = ext === '.png' ? nettoyerPng(brutBuf) : nettoyerJpeg(brutBuf);
+    lues.push({ rel: vrai, mime: ext === '.png' ? 'image/png' : 'image/jpeg', base64: nette.toString('base64'), retire: brutBuf.length - nette.length });
+  }
+  return lues;
+}
 
 // ---------------------------------------------------------------- préparation d'un envoi
 const REGLES_GENERIQUES =
@@ -202,13 +282,16 @@ export async function preparer(p, ctx) {
   if (typeof p.tache !== 'string' || !p.tache.trim()) throw new ErreurDelegation('TACHE_VIDE', 'La tâche est vide.');
   if (p.tache.length > 20_000 || (p.contexte ?? '').length > 100_000) throw new ErreurDelegation('TROP_LONG', 'Tâche ou contexte trop long.');
 
-  const { lus, classe: classeFichiers } = lireFichiers(p.fichiers, cfg, ctx.root);
+  const { lus, classe: classeFichiersLus } = lireFichiers(p.fichiers, cfg, ctx.root);
+  const images = lireImages(p.images, cfg, ctx.root);
+  // une photo vient d'un client : elle impose la classe client
+  const classeFichiers = images.length ? 'client' : classeFichiersLus;
   const brut = [p.tache, p.contexte ?? '', ...lus.map((x) => x.contenu)].join('\n');
   const motClient = detecterClient(brut, motsClients(ctx.root, cfg));
 
   const raisons = [];
   let classe = p.donnees;
-  if (ORDRE.indexOf(classeFichiers) > ORDRE.indexOf(classe)) raisons.push(`fichiers lus (${classeFichiers})`);
+  if (ORDRE.indexOf(classeFichiers) > ORDRE.indexOf(classe)) raisons.push(`${images.length ? 'photos et ' : ''}fichiers lus (${classeFichiers})`);
   classe = plusHaute(classe, classeFichiers);
   if (motClient && classe !== 'client') {
     raisons.push(`nom de client détecté dans le texte : « ${motClient} »`);
@@ -222,6 +305,14 @@ export async function preparer(p, ctx) {
       'ZONE_REFUSEE',
       `Refusé : des données « ${classe} »${raisons.length ? ` (${raisons.join(' ; ')})` : ''} ne partent pas vers un modèle de zone ${modele.zone} (${p.alias}). Modèles permis : ${ok.join(', ')}.`,
     );
+  }
+
+  if (images.length) {
+    // échec fermé : si la liste en direct est illisible, on ne sait pas si le modèle voit les images, donc on n'envoie pas
+    const accepte = (await modalitesEnDirect(ctx)).get(modele.id);
+    if (!accepte?.includes('image')) {
+      throw new ErreurDelegation('IMAGE_NON_SUPPORTEE', `${p.alias} n'accepte pas les images (ou la liste d'OpenRouter est illisible). Choisis un modèle qui voit les images : sonnet, opus, terra, sol, hydrogen...`);
+    }
   }
 
   const avecProjet = regle.contexte_projet;
@@ -241,7 +332,7 @@ export async function preparer(p, ctx) {
   const u = nettoyer(utilisateur);
   const redactions = { cle: s.compte.cle + u.compte.cle, email: s.compte.email + u.compte.email, telephone: s.compte.telephone + u.compte.telephone };
 
-  const tokensEntree = Math.ceil((s.texte.length + u.texte.length) / 3);
+  const tokensEntree = Math.ceil((s.texte.length + u.texte.length) / 3) + images.length * (cfg.images?.tokens_par_image_estimes ?? 2000);
   const tokensSortie = Math.min(Math.max(Math.floor(p.max_tokens ?? 3000), 1), cfg.plafonds.sortie_max_tokens);
   const live = (await prixEnDirect(ctx)).get(modele.id);
   const [pe, ps] = live ? [Math.max(live[0], modele.prix_ref[0]), Math.max(live[1], modele.prix_ref[1])] : modele.prix_ref;
@@ -263,10 +354,16 @@ export async function preparer(p, ctx) {
     conservationZero: regle.conservation_zero,
     messages: [
       { role: 'system', content: s.texte },
-      { role: 'user', content: u.texte },
+      {
+        role: 'user',
+        content: images.length
+          ? [{ type: 'text', text: u.texte }, ...images.map((im) => ({ type: 'image_url', image_url: { url: `data:${im.mime};base64,${im.base64}` } }))]
+          : u.texte,
+      },
     ],
     redactions,
     fichiers: lus.map((x) => x.rel),
+    images: images.map((x) => ({ rel: x.rel, metadonneesRetirees: x.retire })),
     tokensEntree,
     tokensSortie,
     estimationUsd: estimation,
@@ -394,7 +491,9 @@ export async function estimer(p, ctx, { apercu = false } = {}) {
     `~${prep.tokensEntree} tokens en entrée, jusqu'à ${prep.tokensSortie} en sortie`,
     `Coût maximal estimé : ${prep.estimationUsd.toFixed(4)} $ (${prep.prixLive ? 'prix en direct' : 'prix de référence'})${prep.estimationUsd > seuil ? ` → à annoncer à Ben avant l'appel (seuil ${seuil} $)` : ''}`,
   ];
-  if (apercu) lignes.push('', 'TEXTE EXACT QUI PARTIRAIT :', ...prep.messages.map((m) => `[${m.role}]\n${m.content}`));
+  if (prep.images.length) lignes.splice(3, 0, `Photos envoyées (métadonnées EXIF/GPS retirées) : ${prep.images.map((i) => `${i.rel} (-${i.metadonneesRetirees} octets)`).join(', ')}`);
+  const texteDe = (c) => (Array.isArray(c) ? c.map((x) => (x.type === 'text' ? x.text : `[photo]`)).join('\n') : c);
+  if (apercu) lignes.push('', 'TEXTE EXACT QUI PARTIRAIT :', ...prep.messages.map((m) => `[${m.role}]\n${texteDe(m.content)}`));
   return lignes.join('\n');
 }
 
