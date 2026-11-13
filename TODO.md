@@ -67,7 +67,9 @@ Voir `docs/07-STUDIO-INTERFACE.md`.
 - [ ] **B** : décider HTTPS (Tailscale ou Cloudflare Access), démarrage automatique, sauvegarde : tableau de `docs/13`.
 - [ ] **B** : tester sur iPhone (voir `docs/12-TEST-IPHONE.md`) ; autoriser le pare-feu en « Privé » si l'iPhone n'atteint pas le PC ; noter ce qui gêne.
 - [ ] **C** : relancer les recherches B (WhatsApp), C (langues locales) et D (académie) interrompues ; relire la recherche A (`recherches/A-vendre-le-cm.md`, non encore relue).
-- [ ] **C** : serveur MCP `delegue-ia` (voir `docs/09`) ; **B** : ouvrir un compte DeepSeek si d'accord.
+- [x] **C** : serveur MCP `delegue-ia` construit (13/11/2026, 11 tests, mode simulation sans clé). Voir `docs/20`.
+- [ ] **B** : créer le compte OpenRouter, une clé **avec limite de crédit**, la variable `OPENROUTER_API_KEY`, approuver le serveur dans Claude Code (étapes dans `docs/20`).
+- [ ] **C** : après la clé, appel de test réel, puis jeu de test `evals/` sur 2 ou 3 modèles par agent.
 - [ ] **C** : les agents du Studio envoient leurs étapes terminées au moteur (jeton agent).
 - [ ] **B** : dire sur quel appareil jouent les secrétaires, la langue de l'Académie, classement ou non.
 - [ ] **C + B** : Académie, premier mini-jeu « Vrai ou faux bidon » (Ben fournit 10 vraies photos et 10 cas de test).

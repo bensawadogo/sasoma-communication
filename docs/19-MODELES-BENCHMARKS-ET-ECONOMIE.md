@@ -108,7 +108,7 @@ Règles :
 
 ## 8. Ce qui reste à faire (et par qui)
 - **Ben** : donner ses propres clés (OpenAI, Google, DeepSeek) seulement s'il veut tester ces fournisseurs ; faire la notation à l'aveugle de `evals/` (une heure).
-- **Claude** : lancer le jeu de test sur 2 ou 3 modèles par agent une fois les clés disponibles ; construire la passerelle `delegue-ia` (`docs/09`) si Ben veut mélanger les fournisseurs dans une même mission ; confirmer les identifiants d'API de Gemini 4.
+- **Claude** : lancer le jeu de test sur 2 ou 3 modèles par agent une fois les clés disponibles ; la passerelle `delegue-ia` est construite (`docs/20`) : reste l'appel réel et le jeu de test une fois la clé OpenRouter de Ben posée ; confirmer les identifiants d'API de Gemini 4.
 
 ## Sources
 - Prix Anthropic : https://platform.claude.com/docs/en/about-claude/pricing · OpenAI : https://developers.openai.com/api/docs/pricing · DeepSeek : https://api-docs.deepseek.com/quick_start/pricing · Google : https://aistudio.google.com/docs/pricing

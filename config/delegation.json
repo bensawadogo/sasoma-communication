@@ -1,0 +1,52 @@
+{
+  "_commentaire": "Réglages du serveur MCP delegue-ia (scripts/delegue-ia/). Identifiants OpenRouter vérifiés le 13/11/2026 sur https://openrouter.ai/api/v1/models. Prix de référence en $ par million de tokens (entrée, sortie) : le serveur prend le plus élevé entre ce prix et le prix en direct. La clé OpenRouter n'est JAMAIS dans ce fichier : variable d'environnement OPENROUTER_API_KEY.",
+  "plafonds": {
+    "par_appel_usd": 0.25,
+    "par_jour_usd": 2,
+    "par_mois_usd": 15,
+    "seuil_annonce_usd": 0.05,
+    "sortie_max_tokens": 4000,
+    "delai_secondes": 120
+  },
+  "fichiers": {
+    "dossiers_autorises": ["clients", "knowledge", "brouillons", "docs", "recherches", "evals", "config"],
+    "classe_minimale": {
+      "clients": "client",
+      "brouillons": "client",
+      "knowledge": "interne",
+      "docs": "interne",
+      "recherches": "interne",
+      "evals": "interne",
+      "config": "interne"
+    },
+    "extensions": [".md", ".txt", ".csv", ".json"],
+    "taille_max_octets": 60000,
+    "total_max_octets": 200000
+  },
+  "detection": {
+    "_commentaire": "Mots qui font passer un texte en classe client, en plus des noms de fiches dans clients/ (sasoma, etc.).",
+    "mots_en_plus": ["petrov", "petrovoll"]
+  },
+  "classes": {
+    "_commentaire": "public = déjà publié ou sans lien avec un client ni avec le projet. interne = règles, méthodes, docs du projet. client = tout ce qui touche un client (faits, brouillons, chiffres). La classe appliquée est la plus haute entre celle déclarée et celle détectée par le serveur (fichiers lus, noms de clients dans le texte).",
+    "public": { "zones": ["occidentale", "chinoise"], "conservation_zero": false, "contexte_projet": false },
+    "interne": { "zones": ["occidentale"], "conservation_zero": true, "contexte_projet": true },
+    "client": { "zones": ["occidentale"], "conservation_zero": true, "contexte_projet": true }
+  },
+  "modeles": {
+    "haiku": { "id": "anthropic/claude-haiku-5.5", "zone": "occidentale", "prix_ref": [0.10, 0.50] },
+    "sonnet": { "id": "anthropic/claude-sonnet-5.5", "zone": "occidentale", "prix_ref": [2, 10] },
+    "opus": { "id": "anthropic/claude-opus-5.5", "zone": "occidentale", "prix_ref": [4, 20] },
+    "luna": { "id": "openai/gpt-6-luna", "zone": "occidentale", "prix_ref": [0.10, 0.50] },
+    "terra": { "id": "openai/gpt-6.1-terra", "zone": "occidentale", "prix_ref": [1, 5] },
+    "sol": { "id": "openai/gpt-6.1-sol", "zone": "occidentale", "prix_ref": [2, 10] },
+    "hydrogen": { "id": "google/gemini-4-hydrogen", "zone": "occidentale", "prix_ref": [1.5, 7.5] },
+    "carbon": { "id": "google/gemini-4-carbon", "zone": "occidentale", "prix_ref": [2, 10] },
+    "argon": { "id": "google/gemini-4-argon", "zone": "occidentale", "prix_ref": [2, 10] },
+    "deepseek-flash": { "id": "deepseek/deepseek-v4.1-flash-1017", "zone": "chinoise", "prix_ref": [0.15, 0.60] },
+    "kimi": { "id": "moonshotai/kimi-k3.1-pro", "zone": "chinoise", "prix_ref": [2, 10] },
+    "qwen-flash": { "id": "qwen/qwen3.8-flash", "zone": "chinoise", "prix_ref": [0.15, 0.47] },
+    "glm": { "id": "z-ai/glm-5.3", "zone": "chinoise", "prix_ref": [1.4, 4.4] },
+    "minimax-flash": { "id": "minimax/minimax-m3.1-flash", "zone": "chinoise", "prix_ref": [0.075, 0.30] }
+  }
+}

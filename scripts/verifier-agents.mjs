@@ -51,6 +51,8 @@ export function verifier() {
     const outils = String(fm.tools ?? '').split(',').map((t) => t.trim()).filter(Boolean);
     if (outils.length === 0) err("liste d'outils vide");
     for (const o of outils) for (const re of INTERDITS) if (re.test(o)) err(`outil interdit : ${o}`);
+    // seul le chef de studio peut appeler d'autres IA (docs/20) : un seul point de contrôle des envois et des dépenses
+    if (nom !== 'chef-de-studio' && String(fm.tools ?? '').includes('delegue-ia')) err('seul le chef de studio peut utiliser delegue-ia');
     if (!Array.isArray(fm.skills) || !fm.skills.includes('regles-cm')) err('skill regles-cm non chargé');
     const hook = JSON.stringify(fm.hooks ?? {});
     if (!hook.includes(`garde-fou-ecriture.mjs ${nom}`)) err("garde-fou d'écriture absent ou pour un autre agent");
