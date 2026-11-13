@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import type { ChatState } from './chatApi.js';
-import { fetchChat, hasChatAccess, sendChat } from './chatApi.js';
+import { fetchChat, hasChatAccess, sendChat, uploadPhoto } from './chatApi.js';
+import { shrinkPhoto } from './photo.js';
 
 const POLL_MS = 2000;
 /** After a message is sent the answer starts within seconds: look more often for a short while. */
@@ -13,7 +14,7 @@ export interface AgentChat {
   loaded: boolean;
   error: string | null;
   sending: boolean;
-  send: (text: string) => Promise<boolean>;
+  send: (text: string, photo?: File | null) => Promise<boolean>;
   clearError: () => void;
 }
 
@@ -62,11 +63,28 @@ export function useAgentChat(agentId: number | null): AgentChat {
   }, [agentId, burst]);
 
   const send = useCallback(
-    async (text: string) => {
+    async (text: string, photo?: File | null) => {
       if (agentId === null) return false;
       setSending(true);
       setError(null);
-      const result = await sendChat(agentId, text);
+      let message = text;
+      if (photo) {
+        try {
+          const uploaded = await uploadPhoto(agentId, await shrinkPhoto(photo));
+          if (!uploaded.ok) {
+            setSending(false);
+            setError(uploaded.message);
+            return false;
+          }
+          // The agent opens the file itself (its Read tool shows images); the path is all the message carries.
+          message = `${text} (photo jointe, à regarder avec Read : ${uploaded.path})`.trim();
+        } catch (e) {
+          setSending(false);
+          setError(e instanceof Error ? e.message : 'Photo illisible.');
+          return false;
+        }
+      }
+      const result = await sendChat(agentId, message);
       setSending(false);
       if (result.ok) {
         setBurst((n) => n + 1);

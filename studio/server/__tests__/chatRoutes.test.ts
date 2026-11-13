@@ -173,3 +173,65 @@ describe('routes', () => {
     await app2.close();
   });
 });
+
+describe('chat photos', () => {
+  const jpeg = Buffer.concat([
+    Buffer.from([0xff, 0xd8]),
+    Buffer.from([0xff, 0xe1, 0x00, 0x12]),
+    Buffer.from('Exif\0\0GPS-12.3,-1.5'),
+    Buffer.from([0xff, 0xdb, 0x00, 0x04, 0x01, 0x02]),
+    Buffer.from([0xff, 0xda, 0x00, 0x04, 0x03, 0x04, 0x99, 0x98, 0xff, 0xd9]),
+  ]);
+  let photos: string;
+  let app: ReturnType<typeof Fastify>;
+
+  beforeEach(async () => {
+    photos = path.join(dir, 'photos-clients');
+    const agents = new Map([[3, { jsonlFile: transcript, agentName: 'chef', isWaiting: true }]]);
+    const session = { hasExited: false, write: vi.fn() };
+    app = Fastify();
+    registerChatRoutes(app, {
+      token: TOKEN,
+      allowedHostnames: new Set(['127.0.0.1']),
+      store: { get: (id: number) => agents.get(id) } as never,
+      ptyManager: { get: (id: number) => (id === 3 ? session : undefined) } as never,
+      photosDir: photos,
+    });
+    await app.ready();
+  });
+  afterEach(async () => {
+    await app.close();
+  });
+
+  const post = (data: unknown, headers: Record<string, string> = AUTH, id = 3) =>
+    app.inject({ method: 'POST', url: `/api/chat/${id}/photo`, headers, payload: { data } });
+
+  it('saves a photo without its metadata and answers with its path', async () => {
+    const res = await post(jpeg.toString('base64'));
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.rel).toMatch(/^photos-clients\/_a-classer\/\d{8}-\d{6}-[0-9a-f]{4}\.jpg$/);
+    const saved = fs.readFileSync(body.path);
+    expect(saved.includes('GPS')).toBe(false);
+    expect([...saved.subarray(0, 2)]).toEqual([0xff, 0xd8]);
+    expect([...saved.subarray(-2)]).toEqual([0xff, 0xd9]);
+    expect(body.path.startsWith(photos)).toBe(true);
+  });
+
+  it('accepts a data URL, refuses anything that is not a JPEG or PNG, empty or too heavy', async () => {
+    expect((await post(`data:image/jpeg;base64,${jpeg.toString('base64')}`)).statusCode).toBe(200);
+    expect((await post(Buffer.from('<?php echo 1;').toString('base64'))).statusCode).toBe(400);
+    expect((await post(Buffer.from('GIF89a....').toString('base64'))).statusCode).toBe(400);
+    expect((await post('')).statusCode).toBe(400);
+    expect((await post(123)).statusCode).toBe(400);
+    const heavy = Buffer.concat([Buffer.from([0xff, 0xd8, 0xff]), Buffer.alloc(4_100_000)]);
+    expect((await post(heavy.toString('base64'))).statusCode).toBe(400);
+  });
+
+  it('refuses without the token, from an untrusted host, for an unknown agent or one without a terminal', async () => {
+    expect((await post(jpeg.toString('base64'), HOST)).statusCode).toBe(401);
+    expect((await post(jpeg.toString('base64'), { host: 'evil.example', authorization: `Bearer ${TOKEN}` })).statusCode).toBe(403);
+    expect((await post(jpeg.toString('base64'), AUTH, 99)).statusCode).toBe(404);
+    expect(fs.existsSync(photos)).toBe(false);
+  });
+});

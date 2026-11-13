@@ -1,6 +1,6 @@
 import '../quests/sims.css';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { Modal } from '../components/ui/Modal.js';
 import { Plumbob } from '../quests/Plumbob.js';
@@ -39,11 +39,23 @@ export function AgentChatModal({ agentId, onClose, onOpenTerminal }: AgentChatMo
     if (el) stickRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < 60;
   };
 
+  // A photo waiting to go with the next message: shown as a small preview, sent (shrunk, without metadata) with it.
+  const [photo, setPhoto] = useState<File | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const preview = useMemo(() => (photo ? URL.createObjectURL(photo) : null), [photo]);
+  useEffect(() => () => {
+    if (preview) URL.revokeObjectURL(preview);
+  }, [preview]);
+  useEffect(() => setPhoto(null), [agentId]);
+
   const submit = async () => {
     const text = draft.trim();
-    if (!text || sending) return;
+    if ((!text && !photo) || sending) return;
     stickRef.current = true;
-    if (await send(text)) setDraft('');
+    if (await send(text || 'Regarde cette photo.', photo)) {
+      setDraft('');
+      setPhoto(null);
+    }
   };
 
   const title = chat?.name ?? 'Agent';
@@ -117,6 +129,18 @@ export function AgentChatModal({ agentId, onClose, onOpenTerminal }: AgentChatMo
               </p>
             )}
 
+            {preview && (
+              <div className="sims-row" style={{ alignItems: 'center' }}>
+                <img src={preview} alt="Photo jointe" style={{ height: 56, width: 56, objectFit: 'cover' }} />
+                <span className="sims-muted sims-small" style={{ flex: 1 }}>
+                  Photo jointe : elle sera réduite et ses informations (position, appareil) retirées avant l'envoi.
+                </span>
+                <button type="button" className="sims-btn" data-kind="plain" onClick={() => setPhoto(null)} aria-label="Retirer la photo" style={{ minWidth: 46, padding: 0 }}>
+                  ×
+                </button>
+              </div>
+            )}
+
             <form
               className="sims-row"
               onSubmit={(e) => {
@@ -125,17 +149,37 @@ export function AgentChatModal({ agentId, onClose, onOpenTerminal }: AgentChatMo
               }}
             >
               <input
+                ref={fileRef}
+                type="file"
+                accept="image/*"
+                hidden
+                onChange={(e) => {
+                  setPhoto(e.target.files?.[0] ?? null);
+                  e.target.value = '';
+                }}
+              />
+              <button
+                type="button"
+                className="sims-btn"
+                data-kind="plain"
+                disabled={!chat.canSend || sending}
+                aria-label="Joindre une photo"
+                onClick={() => fileRef.current?.click()}
+              >
+                Photo
+              </button>
+              <input
                 className="sims-input"
                 style={{ marginTop: 0 }}
                 value={draft}
-                maxLength={2000}
+                maxLength={photo ? 1700 : 2000}
                 disabled={!chat.canSend || sending}
                 placeholder={chat.canSend ? `Écris à ${chat.name}…` : 'Écriture indisponible'}
                 aria-label={`Message pour ${chat.name}`}
                 enterKeyHint="send"
                 onChange={(e) => setDraft(e.target.value)}
               />
-              <button type="submit" className="sims-btn" disabled={!chat.canSend || sending || !draft.trim()}>
+              <button type="submit" className="sims-btn" disabled={!chat.canSend || sending || (!draft.trim() && !photo)}>
                 {sending ? '…' : 'Envoyer'}
               </button>
             </form>

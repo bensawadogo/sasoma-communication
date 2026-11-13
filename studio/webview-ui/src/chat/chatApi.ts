@@ -48,6 +48,24 @@ export async function sendChat(agentId: number, text: string): Promise<SendResul
   }
 }
 
+export type PhotoResult = { ok: true; path: string; rel: string } | { ok: false; message: string };
+
+/** Sends one (already shrunk) photo to the server, which saves it where the agents can read it. */
+export async function uploadPhoto(agentId: number, base64: string): Promise<PhotoResult> {
+  try {
+    const res = await fetch(`/api/chat/${agentId}/photo`, {
+      method: 'POST',
+      headers: headers(),
+      body: JSON.stringify({ data: base64 }),
+    });
+    const data = (await res.json()) as { message?: string; path?: string; rel?: string };
+    if (res.ok && data.path && data.rel) return { ok: true, path: data.path, rel: data.rel };
+    return { ok: false, message: data.message ?? 'Photo refusée.' };
+  } catch {
+    return { ok: false, message: 'Connexion perdue. Réessaie.' };
+  }
+}
+
 export interface RosterEntry {
   agentId: number;
   name: string;

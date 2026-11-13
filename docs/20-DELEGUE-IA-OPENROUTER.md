@@ -38,6 +38,15 @@ Sans clé, le serveur marche en **simulation** (rien n'est envoyé, il montre ce
 - Une photo ne se « nettoie » pas de ce qu'elle montre : visages, plaques, enseignes d'autres personnes partent avec. Regarde-la avant de la déposer.
 - Le modèle reçoit la photo pour la **lire** (décrire, faire un brief). Il ne génère rien : aucune IA ne génère le bidon.
 
+## Photos dans le popup du Studio (13/11/2026)
+Dans la fenêtre de conversation d'un agent (clic sur le personnage), le bouton **Photo** joint une image au message.
+- Le navigateur réduit la photo (1600 pixels au plus) et la redessine en JPEG : la position GPS, l'appareil et la date ne partent pas. Le serveur vérifie le vrai format (JPEG ou PNG seulement, 4 Mo) et retire les métadonnées une seconde fois.
+- Elle est enregistrée dans `photos-clients/_a-classer/` (jamais poussé sur GitHub). Le message tapé à l'agent contient le chemin du fichier : l'agent l'ouvre avec son outil de lecture, qui affiche les images, **comme moi dans cette conversation**.
+- Seul le détenteur du jeton du Studio peut envoyer une photo, et seulement à un agent qui a un terminal ouvert dans le Studio.
+- Pour qu'une autre IA (GPT, Gemini) voie la photo, dis au **chef de studio** de la lui montrer : il passe son chemin à `delegue-ia` (`images`), avec les garde-fous ci-dessus.
+- Le dossier `_a-classer` mélange les clients : déplace la photo dans `photos-clients/<client>/` quand tu sais à qui elle est.
+- Non testé en vrai : le bouton dans le navigateur avec un vrai agent ouvert, ni l'envoi depuis un iPhone. Les routes serveur ont leurs tests (13), la réduction de taille aussi.
+
 ## Parler directement à un agent dans un terminal (OpenCode)
 Deux façons de travailler, à ne pas confondre :
 | | Claude Code (ici) + `delegue-ia` | OpenCode sur OpenRouter |

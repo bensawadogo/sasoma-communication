@@ -1,7 +1,9 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import * as fs from 'fs';
+import * as path from 'path';
 
 import type { AgentStateStore } from '../agentStateStore.js';
+import { PHOTO_BODY_LIMIT, savePhoto } from './photoUpload.js';
 import type { TerminalSessions } from '../terminal/terminalSessions.js';
 import { bearerTokenValid, normalizeHostname } from '../wsAuth.js';
 
@@ -115,6 +117,14 @@ export interface ChatRouteOptions {
   allowedHostnames: ReadonlySet<string>;
   store: AgentStateStore;
   ptyManager?: TerminalSessions;
+  /** Where photos are saved (`<project>/photos-clients`). Default: beside the data folder (STUDIO_DATA_DIR, else ./production). */
+  photosDir?: string;
+}
+
+/** `<project>/photos-clients`: the data folder is `<project>/production`. */
+export function defaultPhotosDir(): string {
+  const data = process.env['STUDIO_DATA_DIR'] ?? path.join(process.cwd(), 'production');
+  return path.join(path.dirname(path.resolve(data)), 'photos-clients');
 }
 
 export function registerChatRoutes(app: FastifyInstance, options: ChatRouteOptions): void {
@@ -175,6 +185,30 @@ export function registerChatRoutes(app: FastifyInstance, options: ChatRouteOptio
     if (!found) return;
     reply.send(state(found.id, found.agent));
   });
+
+  // A photo for an agent: saved (metadata stripped) in photos-clients/_a-classer/, the path goes back so the
+  // popup can mention it in the message. The agent reads the file with its own tools; nothing else is sent.
+  app.post<{ Params: { agentId: string }; Body: unknown }>(
+    '/api/chat/:agentId/photo',
+    { bodyLimit: PHOTO_BODY_LIMIT },
+    async (request, reply) => {
+      if (!gate(request, reply)) return;
+      const found = agentOf(request.params.agentId, reply);
+      if (!found) return;
+      const session = options.ptyManager?.get(found.id);
+      if (!session || session.hasExited) {
+        reply.code(409).send({ ok: false, message: "Cet agent n'a pas de terminal ouvert dans le Studio." });
+        return;
+      }
+      const body = request.body;
+      const saved = savePhoto(options.photosDir ?? defaultPhotosDir(), isObj(body) ? body['data'] : undefined);
+      if (!saved.ok) {
+        reply.code(400).send(saved);
+        return;
+      }
+      reply.send({ ok: true, rel: saved.rel, path: saved.file });
+    },
+  );
 
   app.post<{ Params: { agentId: string }; Body: unknown }>('/api/chat/:agentId/send', async (request, reply) => {
     if (!gate(request, reply)) return;
