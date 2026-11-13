@@ -7,7 +7,7 @@ model: openrouter/anthropic/claude-haiku-5.5
 permission:
   edit:
     "*": deny
-    .claude/agent-memory/programmateur/**: allow
+    "**/SASOMA-COMMUNICATION/.claude/agent-memory/programmateur/**": allow
   bash: deny
 ---
 

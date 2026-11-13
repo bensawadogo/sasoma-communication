@@ -11,56 +11,130 @@
     "anthropic": {
       "outil": "Claude Code (natif)",
       "modeles": {
-        "haiku": { "id": "claude-haiku-5-5", "prix": "0,10 $ entrée / 0,50 $ sortie par million de tokens (jusqu'à 100 000 tokens de prompt)", "source": "platform.claude.com/docs/en/about-claude/pricing" },
-        "sonnet": { "id": "claude-sonnet-5-5", "prix": "2 $ / 10 $", "source": "idem" },
-        "opus": { "id": "claude-opus-5-5", "prix": "4 $ / 20 $", "source": "idem" },
-        "fable": { "id": "claude-fable-5-2", "prix": "8 $ / 40 $", "source": "idem" }
+        "haiku": {
+          "id": "claude-haiku-5-5",
+          "prix": "0,10 $ entrée / 0,50 $ sortie par million de tokens (jusqu'à 100 000 tokens de prompt)",
+          "source": "platform.claude.com/docs/en/about-claude/pricing"
+        },
+        "sonnet": {
+          "id": "claude-sonnet-5-5",
+          "prix": "2 $ / 10 $",
+          "source": "idem"
+        },
+        "opus": {
+          "id": "claude-opus-5-5",
+          "prix": "4 $ / 20 $",
+          "source": "idem"
+        },
+        "fable": {
+          "id": "claude-fable-5-2",
+          "prix": "8 $ / 40 $",
+          "source": "idem"
+        }
       }
     },
     "openai": {
       "outil": "Codex CLI, OpenCode",
       "modeles": {
-        "luna": { "id": "gpt-6-luna", "prix": "0,10 $ / 0,50 $", "source": "developers.openai.com/api/docs/pricing" },
-        "terra": { "id": "gpt-6.1-terra", "prix": "1 $ / 5 $", "source": "idem" },
-        "sol": { "id": "gpt-6.1-sol", "prix": "2 $ / 10 $", "source": "idem" },
-        "astra": { "id": "gpt-6-astra", "prix": "10 $ / 50 $", "source": "idem" }
+        "luna": {
+          "id": "gpt-6-luna",
+          "prix": "0,10 $ / 0,50 $",
+          "source": "developers.openai.com/api/docs/pricing"
+        },
+        "terra": {
+          "id": "gpt-6.1-terra",
+          "prix": "1 $ / 5 $",
+          "source": "idem"
+        },
+        "sol": {
+          "id": "gpt-6.1-sol",
+          "prix": "2 $ / 10 $",
+          "source": "idem"
+        },
+        "astra": {
+          "id": "gpt-6-astra",
+          "prix": "10 $ / 50 $",
+          "source": "idem"
+        }
       }
     },
     "deepseek": {
       "outil": "Claude Code (point d'accès Anthropic officiel : https://api.deepseek.com/anthropic) ou OpenCode",
       "modeles": {
-        "flash": { "id": "deepseek-flash", "prix": "0,15 $ / 0,60 $ (hors pointe), 0,30 $ / 1,20 $ (pointe)", "source": "api-docs.deepseek.com/quick_start/pricing", "note": "Artificial Analysis : indice 33, 0,60 $ par tâche (max)" },
-        "pro": { "id": "deepseek-v4-pro", "prix": "0,66 $ / 1,98 $ (hors pointe)", "source": "idem", "note": "Artificial Analysis : indice 23 seulement, 1,77 $ par tâche : moins bon que Flash, ne pas choisir" }
+        "flash": {
+          "id": "deepseek-flash",
+          "prix": "0,15 $ / 0,60 $ (hors pointe), 0,30 $ / 1,20 $ (pointe)",
+          "source": "api-docs.deepseek.com/quick_start/pricing",
+          "note": "Artificial Analysis : indice 33, 0,60 $ par tâche (max)"
+        },
+        "pro": {
+          "id": "deepseek-v4-pro",
+          "prix": "0,66 $ / 1,98 $ (hors pointe)",
+          "source": "idem",
+          "note": "Artificial Analysis : indice 23 seulement, 1,77 $ par tâche : moins bon que Flash, ne pas choisir"
+        }
       },
       "confidentialite": "Données traitées en Chine, droit chinois, entrées pouvant servir à l'entraînement (politique de l'appli) : textes non confidentiels seulement"
     },
     "moonshot": {
       "outil": "OpenCode ou passerelle ; point d'accès Anthropic non confirmé par la documentation officielle",
       "modeles": {
-        "k3.1-pro": { "id": "kimi-k3.1-pro", "prix": "2 $ / 10 $ (rapporté par des blogs, tableau officiel illisible)", "source": "platform.kimi.ai/docs", "note": "poids ouverts ; Artificial Analysis : indice 46, 3,68 $ par tâche" }
+        "k3.1-pro": {
+          "id": "kimi-k3.1-pro",
+          "prix": "2 $ / 10 $ (rapporté par des blogs, tableau officiel illisible)",
+          "source": "platform.kimi.ai/docs",
+          "note": "poids ouverts ; Artificial Analysis : indice 46, 3,68 $ par tâche"
+        }
       },
       "confidentialite": "conditions non lues"
     },
     "alibaba": {
       "outil": "OpenCode ou passerelle",
       "modeles": {
-        "qwen3.8-flash": { "id": null, "prix": "0,15 $ / 0,47 $ (rapporté, région Singapour)", "source": "alibabacloud.com/help/en/model-studio", "note": "Artificial Analysis : indice 29 (Flash-Next), 0,57 $ par tâche" },
-        "qwen3.8-max": { "id": null, "prix": "2 $ / 6 $ (rapporté)", "source": "idem", "note": "Artificial Analysis : indice 34 pour 10,02 $ par tâche : très cher pour ce qu'il donne" }
+        "qwen3.8-flash": {
+          "id": null,
+          "prix": "0,15 $ / 0,47 $ (rapporté, région Singapour)",
+          "source": "alibabacloud.com/help/en/model-studio",
+          "note": "Artificial Analysis : indice 29 (Flash-Next), 0,57 $ par tâche"
+        },
+        "qwen3.8-max": {
+          "id": null,
+          "prix": "2 $ / 6 $ (rapporté)",
+          "source": "idem",
+          "note": "Artificial Analysis : indice 34 pour 10,02 $ par tâche : très cher pour ce qu'il donne"
+        }
       },
       "confidentialite": "conditions non lues"
     },
     "zai": {
       "outil": "OpenCode ou passerelle",
       "modeles": {
-        "glm-5.3": { "id": null, "prix": "non vérifié (GLM-5.2 rapporté 1,40 $ / 4,40 $)", "source": "docs.z.ai non lu", "note": "Artificial Analysis : GLM-5.3 indice 32, 5,01 $ par tâche ; GLM-5.3-Flash 28, 0,58 $" }
+        "glm-5.3": {
+          "id": null,
+          "prix": "non vérifié (GLM-5.2 rapporté 1,40 $ / 4,40 $)",
+          "source": "docs.z.ai non lu",
+          "note": "Artificial Analysis : GLM-5.3 indice 32, 5,01 $ par tâche ; GLM-5.3-Flash 28, 0,58 $"
+        }
       },
       "confidentialite": "conditions non lues"
     },
     "google": {
       "outil": "Gemini CLI",
       "modeles": {
-        "hydrogen": { "id": null, "nom": "Gemini 4 Hydrogen", "prix": "1,50 $ / 7,50 $", "source": "aistudio.google.com/docs/pricing", "note": "identifiant d'API non confirmé : à copier de la page de Google avant usage" },
-        "carbon": { "id": null, "nom": "Gemini 4 Carbon", "prix": "2 $ / 10 $ (4 $ / 20 $ dès le 1er décembre 2026)", "source": "idem", "note": "identifiant d'API non confirmé" }
+        "hydrogen": {
+          "id": null,
+          "nom": "Gemini 4 Hydrogen",
+          "prix": "1,50 $ / 7,50 $",
+          "source": "aistudio.google.com/docs/pricing",
+          "note": "identifiant d'API non confirmé : à copier de la page de Google avant usage"
+        },
+        "carbon": {
+          "id": null,
+          "nom": "Gemini 4 Carbon",
+          "prix": "2 $ / 10 $ (4 $ / 20 $ dès le 1er décembre 2026)",
+          "source": "idem",
+          "note": "identifiant d'API non confirmé"
+        }
       }
     }
   },
@@ -68,111 +142,265 @@
     "chef-de-studio": {
       "metier": "Découpe la demande, délègue, assemble. Appels d'outils et suivi de longues tâches.",
       "critere": "Agentique : appeler des outils, suivre un plan, ne pas se perdre.",
-      "benchmarks": ["BFCL V4 (appel d'outils, Berkeley)", "Artificial Analysis Intelligence Index (indice et coût par tâche)"],
+      "benchmarks": [
+        "BFCL V4 (appel d'outils, Berkeley)",
+        "Artificial Analysis Intelligence Index (indice et coût par tâche)"
+      ],
       "modeles": {
-        "eco": { "anthropic": "sonnet", "openai": "terra" },
-        "equilibre": { "anthropic": "opus", "openai": "sol" },
-        "max": { "anthropic": "fable", "openai": "astra" }
+        "eco": {
+          "anthropic": "sonnet",
+          "openai": "terra"
+        },
+        "equilibre": {
+          "anthropic": "opus",
+          "openai": "sol"
+        },
+        "max": {
+          "anthropic": "fable",
+          "openai": "astra"
+        }
       }
     },
     "controleur": {
       "metier": "Vérifie un post contre la checklist de 9 points et les sources. Cherche ce qui ne va pas.",
       "critere": "Fidélité aux sources, rigueur, ne pas valider par complaisance.",
-      "benchmarks": ["Vectara HHEM (fidélité d'un résumé à son document)", "test maison : posts piégés (evals/)"],
+      "benchmarks": [
+        "Vectara HHEM (fidélité d'un résumé à son document)",
+        "test maison : posts piégés (evals/)"
+      ],
       "modeles": {
-        "eco": { "anthropic": "sonnet", "openai": "terra" },
-        "equilibre": { "anthropic": "opus", "openai": "sol" },
-        "max": { "anthropic": "fable", "openai": "astra" }
+        "eco": {
+          "anthropic": "sonnet",
+          "openai": "terra"
+        },
+        "equilibre": {
+          "anthropic": "opus",
+          "openai": "sol"
+        },
+        "max": {
+          "anthropic": "fable",
+          "openai": "astra"
+        }
       }
     },
     "veilleur": {
       "metier": "Recherche sourcée, vérification d'affirmations, mise à jour du savoir partagé.",
       "critere": "Chercher le bon, citer ses sources, dire « inconnu » plutôt qu'inventer.",
-      "benchmarks": ["Vectara HHEM (fidélité aux documents lus)", "test maison : 10 questions à réponse connue (evals/)"],
+      "benchmarks": [
+        "Vectara HHEM (fidélité aux documents lus)",
+        "test maison : 10 questions à réponse connue (evals/)"
+      ],
       "modeles": {
-        "eco": { "anthropic": "haiku", "openai": "luna", "deepseek": "flash" },
-        "equilibre": { "anthropic": "sonnet", "openai": "terra", "deepseek": "flash" },
-        "max": { "anthropic": "opus", "openai": "sol" }
+        "eco": {
+          "anthropic": "haiku",
+          "openai": "luna",
+          "deepseek": "flash"
+        },
+        "equilibre": {
+          "anthropic": "sonnet",
+          "openai": "terra",
+          "deepseek": "flash"
+        },
+        "max": {
+          "anthropic": "opus",
+          "openai": "sol"
+        }
       }
     },
     "stratege": {
       "metier": "Idées d'histoires, calendrier de 4 semaines.",
       "critere": "Créativité adaptée à un public, planification.",
-      "benchmarks": ["Arena, catégorie Creative Writing (11/11/2026)", "EQ-Bench Creative Writing v3 (page non chargée ici)"],
+      "benchmarks": [
+        "Arena, catégorie Creative Writing (11/11/2026)",
+        "EQ-Bench Creative Writing v3 (page non chargée ici)"
+      ],
       "modeles": {
-        "eco": { "anthropic": "haiku", "openai": "luna" },
-        "equilibre": { "anthropic": "sonnet", "openai": "terra" },
-        "max": { "anthropic": "opus", "openai": "sol" }
+        "eco": {
+          "anthropic": "haiku",
+          "openai": "luna"
+        },
+        "equilibre": {
+          "anthropic": "sonnet",
+          "openai": "terra"
+        },
+        "max": {
+          "anthropic": "opus",
+          "openai": "sol"
+        }
       }
     },
     "scenariste": {
       "metier": "Scénarios courts, légendes, mots-clés, en français et au ton du client.",
       "critere": "Qualité d'écriture en français, ton, respect des faits fournis.",
-      "benchmarks": ["Arena, catégorie Creative Writing (11/11/2026) : en anglais surtout, pas de catégorie française trouvée", "test maison : 5 scénarios notés à l'aveugle (evals/)"],
+      "benchmarks": [
+        "Arena, catégorie Creative Writing (11/11/2026) : en anglais surtout, pas de catégorie française trouvée",
+        "test maison : 5 scénarios notés à l'aveugle (evals/)"
+      ],
       "modeles": {
-        "eco": { "anthropic": "sonnet", "openai": "terra" },
-        "equilibre": { "anthropic": "sonnet", "openai": "sol" },
-        "max": { "anthropic": "opus", "openai": "sol" }
+        "eco": {
+          "anthropic": "sonnet",
+          "openai": "terra"
+        },
+        "equilibre": {
+          "anthropic": "sonnet",
+          "openai": "sol"
+        },
+        "max": {
+          "anthropic": "opus",
+          "openai": "sol"
+        }
       }
     },
     "createur-visuel": {
       "metier": "Briefs visuels et gabarits. Aucun rendu payant.",
       "critere": "Briefs précis, respect des règles de marque.",
-      "benchmarks": ["aucun benchmark public adapté", "test maison (evals/)"],
+      "benchmarks": [
+        "aucun benchmark public adapté",
+        "test maison (evals/)"
+      ],
       "modeles": {
-        "eco": { "anthropic": "haiku", "openai": "luna" },
-        "equilibre": { "anthropic": "sonnet", "openai": "terra" },
-        "max": { "anthropic": "opus", "openai": "sol" }
+        "eco": {
+          "anthropic": "haiku",
+          "openai": "luna"
+        },
+        "equilibre": {
+          "anthropic": "sonnet",
+          "openai": "terra"
+        },
+        "max": {
+          "anthropic": "opus",
+          "openai": "sol"
+        }
       }
     },
     "programmateur": {
       "metier": "Crée les posts validés en mode revue dans Metricool.",
       "critere": "Exécution exacte d'un appel d'outil ; la porte 3 de Ben rattrape une erreur.",
-      "benchmarks": ["BFCL V4 (appel d'outils)"],
+      "benchmarks": [
+        "BFCL V4 (appel d'outils)"
+      ],
       "modeles": {
-        "eco": { "anthropic": "haiku", "openai": "luna" },
-        "equilibre": { "anthropic": "haiku", "openai": "luna" },
-        "max": { "anthropic": "sonnet", "openai": "terra" }
+        "eco": {
+          "anthropic": "haiku",
+          "openai": "luna"
+        },
+        "equilibre": {
+          "anthropic": "haiku",
+          "openai": "luna"
+        },
+        "max": {
+          "anthropic": "sonnet",
+          "openai": "terra"
+        }
       }
     },
     "publicitaire": {
       "metier": "Briefs de campagne et lecture des chiffres publicitaires.",
       "critere": "Chiffres exacts, budgets plafonnés.",
-      "benchmarks": ["Artificial Analysis Intelligence Index", "test maison : lecture d'un export de chiffres (evals/)"],
+      "benchmarks": [
+        "Artificial Analysis Intelligence Index",
+        "test maison : lecture d'un export de chiffres (evals/)"
+      ],
       "modeles": {
-        "eco": { "anthropic": "haiku", "openai": "luna" },
-        "equilibre": { "anthropic": "sonnet", "openai": "terra" },
-        "max": { "anthropic": "opus", "openai": "sol" }
+        "eco": {
+          "anthropic": "haiku",
+          "openai": "luna"
+        },
+        "equilibre": {
+          "anthropic": "sonnet",
+          "openai": "terra"
+        },
+        "max": {
+          "anthropic": "opus",
+          "openai": "sol"
+        }
       }
     },
     "analyste": {
       "metier": "Bilan mensuel avec les vrais chiffres.",
       "critere": "Exactitude des chiffres, jamais d'estimation présentée comme un résultat.",
-      "benchmarks": ["Artificial Analysis Intelligence Index", "test maison : bilan sur données connues (evals/)"],
+      "benchmarks": [
+        "Artificial Analysis Intelligence Index",
+        "test maison : bilan sur données connues (evals/)"
+      ],
       "modeles": {
-        "eco": { "anthropic": "haiku", "openai": "luna" },
-        "equilibre": { "anthropic": "sonnet", "openai": "terra" },
-        "max": { "anthropic": "opus", "openai": "sol" }
+        "eco": {
+          "anthropic": "haiku",
+          "openai": "luna"
+        },
+        "equilibre": {
+          "anthropic": "sonnet",
+          "openai": "terra"
+        },
+        "max": {
+          "anthropic": "opus",
+          "openai": "sol"
+        }
       }
     },
     "formateur": {
       "metier": "Fiches, exercices et jeux pour les secrétaires, en français simple.",
       "critere": "Clarté, phrases courtes, exemples exacts.",
-      "benchmarks": ["aucun benchmark public adapté", "test maison (evals/)"],
+      "benchmarks": [
+        "aucun benchmark public adapté",
+        "test maison (evals/)"
+      ],
       "modeles": {
-        "eco": { "anthropic": "haiku", "openai": "luna" },
-        "equilibre": { "anthropic": "sonnet", "openai": "terra" },
-        "max": { "anthropic": "opus", "openai": "sol" }
+        "eco": {
+          "anthropic": "haiku",
+          "openai": "luna"
+        },
+        "equilibre": {
+          "anthropic": "sonnet",
+          "openai": "terra"
+        },
+        "max": {
+          "anthropic": "opus",
+          "openai": "sol"
+        }
       }
     },
     "commercial": {
       "metier": "Propositions, grille de prix, contrats simples, fiches de prospects (jamais envoyés).",
       "critere": "Persuasion honnête, aucun prix inventé.",
-      "benchmarks": ["GDPval (tâches professionnelles réelles ; aucun détail marketing/vente trouvé)", "test maison (evals/)"],
+      "benchmarks": [
+        "GDPval (tâches professionnelles réelles ; aucun détail marketing/vente trouvé)",
+        "test maison (evals/)"
+      ],
       "modeles": {
-        "eco": { "anthropic": "haiku", "openai": "luna" },
-        "equilibre": { "anthropic": "sonnet", "openai": "terra" },
-        "max": { "anthropic": "opus", "openai": "sol" }
+        "eco": {
+          "anthropic": "haiku",
+          "openai": "luna"
+        },
+        "equilibre": {
+          "anthropic": "sonnet",
+          "openai": "terra"
+        },
+        "max": {
+          "anthropic": "opus",
+          "openai": "sol"
+        }
+      }
+    },
+    "traceur": {
+      "metier": "Plan de suivi et kit de pixel Meta sur mesure pour chaque client (à installer par Ben).",
+      "critere": "Exactitude du code, aucune donnée inventée, vérification sur la page officielle.",
+      "benchmarks": [
+        "test maison : kit de pixel pour un client fictif (evals/)"
+      ],
+      "modeles": {
+        "eco": {
+          "anthropic": "haiku",
+          "openai": "luna"
+        },
+        "equilibre": {
+          "anthropic": "sonnet",
+          "openai": "terra"
+        },
+        "max": {
+          "anthropic": "opus",
+          "openai": "sol"
+        }
       }
     }
   }

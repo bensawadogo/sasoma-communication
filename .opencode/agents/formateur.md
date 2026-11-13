@@ -8,10 +8,10 @@ model: openrouter/anthropic/claude-sonnet-5.5
 permission:
   edit:
     "*": deny
-    brouillons/**: allow
-    formation/**: allow
-    .claude/agent-memory/formateur/**: allow
-    docs/04-FORMATION-SECRETAIRES.md: allow
+    "**/SASOMA-COMMUNICATION/brouillons/**": allow
+    "**/SASOMA-COMMUNICATION/formation/**": allow
+    "**/SASOMA-COMMUNICATION/.claude/agent-memory/formateur/**": allow
+    "**/SASOMA-COMMUNICATION/docs/04-FORMATION-SECRETAIRES.md": allow
   bash: deny
 ---
 

@@ -64,3 +64,13 @@ test('le script bloque (code 2) et laisse passer (code 0) comme un vrai hook', (
   const casse = run('stratege', 'pas du json');
   assert.equal(casse.status, 2);
 });
+
+test('le traceur écrit ses kits de pixel, et rien d\'autre (ni le site d\'un client, ni les autres dossiers de production)', () => {
+  assert.equal(decider('traceur', p('production/pixels/sasoma/pixel-base.html')).ok, true);
+  assert.equal(decider('traceur', p('production/plans/2026-11-13-pub.md')).ok, false);
+  assert.equal(decider('traceur', p('brouillons/pub.md')).ok, false);
+  assert.equal(decider('traceur', p('knowledge/pixel-meta-modele.md')).ok, false);
+  assert.equal(decider('traceur', 'C:/SITE-SASOMA/index.html').ok, false);
+  // les autres agents ne touchent pas à ses kits, sauf ceux qui écrivent dans production/
+  assert.equal(decider('formateur', p('production/pixels/sasoma/pixel-base.html')).ok, false);
+});

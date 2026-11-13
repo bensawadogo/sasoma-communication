@@ -22,6 +22,7 @@ Service de community management : on propose, **Ben décide**. Contexte complet 
 | `publicitaire` | Briefs de campagne et lecture des chiffres publicitaires. |
 | `scenariste` | Scénarios courts, légendes, mots-clés, en français et au ton du client. |
 | `stratege` | Idées d'histoires, calendrier de 4 semaines. |
+| `traceur` | Plan de suivi et kit de pixel Meta sur mesure pour chaque client (à installer par Ben). |
 | `veilleur` | Recherche sourcée, vérification d'affirmations, mise à jour du savoir partagé. |
 
 Définitions détaillées : `.claude/agents/` (Claude Code), `.opencode/agents/`, `.codex/agents/`, `.gemini/agents/` (générées). Modèles : config/modeles.json (profil equilibre).

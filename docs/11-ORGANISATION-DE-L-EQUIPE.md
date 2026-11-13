@@ -1,6 +1,6 @@
 # 11. Organisation de l'équipe d'agents
 
-Mise à jour du 12/11/2026. L'équipe compte 11 agents dans `.claude/agents/`. **Ben décide, le chef-de-studio coordonne, les spécialistes exécutent.**
+Mise à jour du 12/11/2026. L'équipe compte 12 agents dans `.claude/agents/`. **Ben décide, le chef-de-studio coordonne, les spécialistes exécutent.**
 Les définitions sont lues au démarrage : lancer avec `claude --agent chef-de-studio` pour que tout (outils et mémoire) soit actif.
 
 ## 1. Organigramme
@@ -20,13 +20,14 @@ Les définitions sont lues au démarrage : lancer avec `claude --agent chef-de-s
 
 | Agent | Rôle en une phrase | Outils réels | Ce qu'il ne peut pas faire |
 |---|---|---|---|
-| **chef-de-studio** | Reçoit un thème, délègue, assemble, présente à Ben | Délégation aux 10 spécialistes, fichiers du projet | Publier, envoyer, valider à la place de Ben |
+| **chef-de-studio** | Reçoit un thème, délègue, assemble, présente à Ben | Délégation aux 11 spécialistes, fichiers du projet | Publier, envoyer, valider à la place de Ben |
 | **veilleur** | Vérifie les faits, suit plateformes et marché, source tout | Recherche web, Firecrawl, fichiers | Contacter, acheter, créer un compte |
 | **stratege** | Idées, calendrier, heures | Web, Metricool (lecture), fichiers | Publier |
 | **scenariste** | Scénarios, légendes, mots-clés | Fichiers | Générer, publier |
 | **createur-visuel** | Briefs visuels, gabarits | Orshot (lecture, aperçu), Unsplash, fichiers | Générer un produit/logo, rendre des médias payants |
 | **controleur** | Pré-contrôle de la porte 2 (9 points, sources) | Fichiers | Valider, corriger, publier |
 | **programmateur** | Met en file dans Metricool **en relecture** | Metricool : création en relecture, lecture | Publication directe, modification |
+| **traceur** | Plan de suivi et kit de pixel Meta sur mesure par client (fichiers dans `production/pixels/<client>/`) | Fichiers, pages officielles de Meta (lecture) | Créer quoi que ce soit chez Meta, installer sur un site, envoyer |
 | **publicitaire** | Brief de campagne, lecture des chiffres pub | Supermetrics (lecture), fichiers | Créer ou modifier une campagne |
 | **analyste** | Bilan mensuel avec chiffres réels | Metricool et Supermetrics (lecture), fichiers | Écrire sur les comptes |
 | **formateur** | Carnet de prompts, leçons, mini-jeux | Fichiers | Envoyer quoi que ce soit |

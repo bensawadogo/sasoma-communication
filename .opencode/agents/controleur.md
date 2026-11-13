@@ -9,8 +9,8 @@ model: openrouter/anthropic/claude-opus-5.5
 permission:
   edit:
     "*": deny
-    .claude/agent-memory/controleur/**: allow
-    brouillons/*-controle*: allow
+    "**/SASOMA-COMMUNICATION/.claude/agent-memory/controleur/**": allow
+    "**/SASOMA-COMMUNICATION/brouillons/*-controle*": allow
   bash: deny
 ---
 

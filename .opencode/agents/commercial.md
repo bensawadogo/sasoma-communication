@@ -8,9 +8,9 @@ model: openrouter/anthropic/claude-sonnet-5.5
 permission:
   edit:
     "*": deny
-    clients/**: allow
-    brouillons/**: allow
-    .claude/agent-memory/commercial/**: allow
+    "**/SASOMA-COMMUNICATION/clients/**": allow
+    "**/SASOMA-COMMUNICATION/brouillons/**": allow
+    "**/SASOMA-COMMUNICATION/.claude/agent-memory/commercial/**": allow
   bash: deny
 ---
 

@@ -36,6 +36,10 @@ function droitsEcriture(nom) {
   ];
 }
 
+// OpenCode 1.x compare les motifs au chemin complet : un motif relatif contenant « / » ne correspond à rien (testé le 13/11/2026 :
+// « formation/** » refusait une écriture permise). On ancre donc sur le nom du dossier du projet (préfixe « ** » puis « / », « projet », « / »).
+const ancrer = (motif) => `**/${path.basename(ROOT)}/${motif}`;
+
 /** Identifiant de modèle pour OpenCode : « openrouter/<id OpenRouter> » (porte unique, config/delegation.json), sinon « fournisseur/<id direct> ». */
 function modeleOpenCode(config, nom, profil, fournisseur) {
   if (fournisseur === 'openrouter') {
@@ -69,7 +73,7 @@ function opencode(agents, config, profil, fournisseur, sortie, format = 'v1') {
         ],
       };
     } else {
-      regles = { permission: { edit: { '*': 'deny', ...Object.fromEntries(droits.map((d) => [d, 'allow'])) }, bash: 'deny' } };
+      regles = { permission: { edit: { '*': 'deny', ...Object.fromEntries(droits.map((d) => [ancrer(d), 'allow'])) }, bash: 'deny' } };
     }
     const fm = { description: a.fm.description, mode: a.nom === 'chef-de-studio' ? 'primary' : 'subagent', ...(model ? { model } : {}), ...regles };
     fichiers.push(ecrire(sortie, `.opencode/agents/${a.nom}.md`, `---

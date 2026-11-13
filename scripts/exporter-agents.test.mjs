@@ -29,7 +29,7 @@ test('OpenCode (1.x) : un agent par fichier, modèle OpenRouter du profil, droit
   try {
     exporter({ cible: 'opencode', profil: 'max', sortie });
     const dir = path.join(sortie, '.opencode', 'agents');
-    assert.equal(readdirSync(dir).length, 11);
+    assert.equal(readdirSync(dir).length, 12);
     const chef = frontmatter(path.join(dir, 'chef-de-studio.md'));
     assert.equal(chef.mode, 'primary');
     assert.equal(chef.model, 'openrouter/anthropic/claude-fable-5.2');
@@ -38,11 +38,11 @@ test('OpenCode (1.x) : un agent par fichier, modèle OpenRouter du profil, droit
     assert.equal(prog.model, 'openrouter/anthropic/claude-sonnet-5.5');
     assert.equal(prog.permissions, undefined, "pas la syntaxe V2 : OpenCode 1.x la refuse");
     assert.equal(prog.permission.edit['*'], 'deny');
-    assert.equal(prog.permission.edit['.claude/agent-memory/programmateur/**'], 'allow');
+    assert.equal(prog.permission.edit['**/SASOMA-COMMUNICATION/.claude/agent-memory/programmateur/**'], 'allow', 'motif ancré sur le dossier du projet');
     assert.equal(prog.permission.bash, 'deny');
     const ctrl = frontmatter(path.join(dir, 'controleur.md'));
-    assert.equal(ctrl.permission.edit['brouillons/*-controle*'], 'allow');
-    assert.equal(ctrl.permission.edit['brouillons/**'], undefined);
+    assert.equal(ctrl.permission.edit['**/SASOMA-COMMUNICATION/brouillons/*-controle*'], 'allow');
+    assert.equal(ctrl.permission.edit['**/SASOMA-COMMUNICATION/brouillons/**'], undefined);
   } finally {
     rmSync(sortie, { recursive: true, force: true });
   }
@@ -72,7 +72,7 @@ test('Codex : TOML avec nom, description, modèle OpenAI et instructions', () =>
     assert.match(t, /^developer_instructions = '''/m);
     const prog = readFileSync(path.join(sortie, '.codex', 'agents', 'programmateur.toml'), 'utf8');
     assert.match(prog, /^model = "gpt-6-luna"$/m);
-    assert.equal(readdirSync(path.join(sortie, '.codex', 'agents')).length, 11);
+    assert.equal(readdirSync(path.join(sortie, '.codex', 'agents')).length, 12);
   } finally {
     rmSync(sortie, { recursive: true, force: true });
   }

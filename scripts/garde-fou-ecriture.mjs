@@ -25,6 +25,8 @@ export const PERIMETRES = {
   programmateur: { dossiers: [memoire('programmateur')] },
   analyste: { dossiers: ['clients', 'production', memoire('analyste')] },
   publicitaire: { dossiers: ['brouillons', 'production', memoire('publicitaire')] },
+  // Le traceur n'écrit que ses kits de suivi (production/pixels) : il n'a aucun accès à Meta ni aux sites des clients.
+  traceur: { dossiers: ['production/pixels', memoire('traceur')] },
   formateur: {
     dossiers: ['brouillons', 'formation', memoire('formateur')],
     fichiers: ['docs/04-FORMATION-SECRETAIRES.md'],

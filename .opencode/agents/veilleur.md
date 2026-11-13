@@ -9,9 +9,9 @@ model: openrouter/anthropic/claude-sonnet-5.5
 permission:
   edit:
     "*": deny
-    recherches/**: allow
-    knowledge/**: allow
-    .claude/agent-memory/veilleur/**: allow
+    "**/SASOMA-COMMUNICATION/recherches/**": allow
+    "**/SASOMA-COMMUNICATION/knowledge/**": allow
+    "**/SASOMA-COMMUNICATION/.claude/agent-memory/veilleur/**": allow
   bash: deny
 ---
 

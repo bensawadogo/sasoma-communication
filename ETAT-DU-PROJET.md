@@ -40,10 +40,11 @@ Ce fichier est la **mémoire commune** du projet. Il ne dépend d'aucun outil : 
 
 <!-- AUTO:DEBUT -->
 ## État automatique (`node scripts/relais.mjs`)
-- Profil de modèles actif : **equilibre** (opus : chef-de-studio, controleur ; sonnet : veilleur, stratege, scenariste, createur-visuel, publicitaire, analyste, formateur, commercial ; haiku : programmateur)
-- Agents : analyste, chef-de-studio, commercial, controleur, createur-visuel, formateur, programmateur, publicitaire, scenariste, stratege, veilleur
+- Profil de modèles actif : **equilibre** (opus : chef-de-studio, controleur ; sonnet : veilleur, stratege, scenariste, createur-visuel, publicitaire, analyste, formateur, commercial, traceur ; haiku : programmateur)
+- Agents : analyste, chef-de-studio, commercial, controleur, createur-visuel, formateur, programmateur, publicitaire, scenariste, stratege, traceur, veilleur
 - Autres IA via OpenRouter : 0 appel(s), 0.0000 $ dépensés au total (journal sans contenu)
 - Derniers changements :
+- dbd7ae7 Autonomie multi-outils : memoire commune (ETAT-DU-PROJET), reglages OpenCode 1.x/Codex/Gemini, export V1, docs/21
 - f684d85 Studio : photos dans le popup de conversation (reduites, metadonnees retirees, enregistrees pour l'agent)
 - 4eb1364 delegue-ia : photos (metadonnees retirees, classe client), doc terminal OpenCode
 - 731594a Jeu de test automatise : taches, lanceur a l'aveugle, estimation avant envoi
@@ -51,7 +52,6 @@ Ce fichier est la **mémoire commune** du projet. Il ne dépend d'aucun outil : 
 - 61606c7 Serveur MCP delegue-ia (OpenRouter) : classes de donnees, nettoyage, plafonds, simulation
 - 2246ffa IA chinoises : recherche, prix, confidentialite, decision (DeepSeek Flash au lieu de Pro)
 - 478f199 Modeles par agent, benchmarks, export vers les autres outils
-- 2a61719 Comparatif des tunnels (ngrok, Cloudflare, Tailscale, VS Code, zrok)
 - Tâches ouvertes dans TODO.md (12 affichées) :
   - B : donner ses heures disponibles par mois et son revenu visé (pour calculer les prix).
   - B : donner la liste des entreprises ayant reçu un logo animé (secteur, taille, présence Facebook).
