@@ -38,7 +38,9 @@ Le **prix par token n'est pas le coût d'une tâche** : un modèle qui réfléch
 | OpenAI | GPT-6 Luna 0,10/0,50 · GPT-6.1 Terra 1/5 · GPT-6.1 Sol 2/10 · GPT-6 Astra 10/50 | lectures 0,05× | −50 % |
 | DeepSeek | V4.1 Flash 0,15/0,60 hors pointe (double en pointe : 01-04 h et 06-10 h UTC en semaine) · V4 Pro 0,66/1,98 | lectures 0,02× | — |
 | Google | Gemini 4 Hydrogen 1,50/7,50 · Gemini 4 Carbon et Argon 2/10 **puis 4/20 dès le 01/12/2026** · Gemini 3.8 Flash 0,75/3,75 puis 1,50/7,50 dès le 01/01/2027 | oui | −50 % |
-| Moonshot (Kimi K3.1 Pro) | 2/10 (**rapporté** par des agrégateurs, page officielle non lue) | 0,20 | — |
+| Moonshot (Kimi K3.1 Pro) | 2/10 (**rapporté** par des blogs : le tableau de la page officielle était vide à la lecture) | 0,20 (rapporté) | −40 % (officiel) |
+| Alibaba (Qwen3.8) | Flash 0,15/0,47 · Max 2/6 (**rapporté**, région Singapour) | non vérifié | — |
+| Z.ai (GLM) | GLM-5.2 1,40/4,40 (**rapporté**) ; GLM-5.3 non vérifié | 0,26 (rapporté) | — |
 Opus 5.5 ne coûte que **2 fois** Sonnet 5.5 : l'utiliser pour décider et contrôler est abordable.
 
 ## 4. Le travail de chaque agent (liste d'attribution)
@@ -47,7 +49,7 @@ Source unique : `config/modeles.json` (3 profils : eco, equilibre, max). Profil 
 |---|---|---|---|---|---|
 | chef-de-studio | découper, déléguer, assembler | appels d'outils, suivi du plan | **Opus 5.5** | GPT-6.1 Sol | test maison (tâche n°1) |
 | controleur | porte 2 : 9 points et sources | rigueur, fidélité, aucune complaisance | **Opus 5.5** | GPT-6.1 Sol | posts piégés |
-| veilleur | recherche sourcée | sources, « inconnu » | Sonnet 5.5 | GPT-6.1 Terra ; DeepSeek V4 Pro pour résumer des textes non confidentiels | 10 questions à réponse connue |
+| veilleur | recherche sourcée | sources, « inconnu » | Sonnet 5.5 | GPT-6.1 Terra ; DeepSeek V4.1 Flash pour résumer des textes non confidentiels (voir section 7bis) | 10 questions à réponse connue |
 | stratege | idées, calendrier | créativité, planification | Sonnet 5.5 | GPT-6.1 Terra | notation à l'aveugle |
 | scenariste | scénarios, légendes en français | qualité d'écriture, ton | Sonnet 5.5 (Opus 5.5 si le test le justifie) | GPT-6.1 Sol ; Gemini 4 Hydrogen ou 3.8 Flash, proches de Opus 5.5 sur Arena pour 2 à 5 fois moins cher | 5 scénarios à l'aveugle |
 | createur-visuel | briefs visuels | précision, règles de marque | Sonnet 5.5 | GPT-6.1 Terra | test maison |
@@ -67,7 +69,7 @@ Changé par rapport au 13/11 matin : le programmateur passe de Sonnet à Haiku (
 | Codex CLI | `.codex/agents/*.toml` | `--cible codex` | Format officiel lu (nom, description, modèle, instructions) ; serveurs MCP et sandbox se règlent dans la session, pas par agent |
 | Gemini CLI | `.gemini/agents/*.md` | `--cible gemini --modele-gemini <identifiant>` | Format officiel lu ; **sans liste d'outils** : l'agent hérite de tout (à restreindre dans Gemini CLI) ; identifiant d'API Gemini 4 non confirmé |
 | Cursor, Copilot, autres | `AGENTS.md`, `.agents/skills/` | `--cible agents` | Support du format SKILL.md **rapporté** par des blogs, à vérifier outil par outil |
-| Claude Code avec un autre modèle | variables d'environnement | passerelle (OpenRouter, LiteLLM) | OpenRouter : `ANTHROPIC_BASE_URL=https://openrouter.ai/api`, jeton dans `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_API_KEY` vide ; OpenRouter prévient que Claude Code est optimisé pour les modèles Anthropic. Points d'accès Anthropic-compatibles de DeepSeek et Kimi : **non vérifiés** |
+| Claude Code avec un autre modèle | variables d'environnement | passerelle (OpenRouter, LiteLLM) | OpenRouter : `ANTHROPIC_BASE_URL=https://openrouter.ai/api`, jeton dans `ANTHROPIC_AUTH_TOKEN`, `ANTHROPIC_API_KEY` vide ; OpenRouter prévient que Claude Code est optimisé pour les modèles Anthropic. DeepSeek a un point d'accès Anthropic **officiel** (`ANTHROPIC_BASE_URL=https://api.deepseek.com/anthropic`, clé DeepSeek, modèles `deepseek-flash` ou `deepseek-v4-pro`, lu sur leur documentation ; les serveurs MCP et le cache ne sont pas pris en charge). Kimi : point d'accès Anthropic **non confirmé** par la documentation officielle (seul `https://api.moonshot.ai/v1` au format OpenAI y figure) |
 Limites à connaître : les 35 fichiers générés sont **des copies** (on modifie la source, puis on relance l'export) ; **hors Claude Code, le périmètre d'écriture n'est plus bloqué par le matériel** (règles écrites et permissions de l'outil) ; une équipe qui délègue (le chef appelle les autres) n'existe nativement que dans Claude Code et OpenCode, à tester dans les autres. Tous ces outils ont besoin de **tes propres clés d'API** (je n'en crée ni n'en saisis aucune).
 
 ## 6. Économie sans perdre la qualité
@@ -82,8 +84,27 @@ Règles :
 
 ## 7. Confidentialité (à lire avant d'utiliser une autre IA)
 - Les niveaux gratuits de Google (Gemini 4 Hydrogen, Gemini 3.x Flash) précisent que le contenu envoyé **peut servir à améliorer leurs produits** (page officielle) : **jamais de données de clients** sur ces niveaux.
-- DeepSeek et Moonshot : conditions d'usage et lieu de traitement des données **non lus** ici : réserver à des textes non confidentiels tant que cela n'est pas vérifié.
+- DeepSeek : conditions lues le 13/11/2026 (section 7bis). Moonshot, Alibaba, Z.ai : conditions **non lues** : textes non confidentiels seulement.
 - Les règles absolues (bidon jamais généré, faits sourcés, rien sans accord de Ben) valent pour **toute** IA : elles sont dans `AGENTS.md` et le skill commun.
+
+## 7bis. Les IA chinoises (recherche du 13/11/2026)
+**Artificial Analysis (page officielle, indice / coût par tâche) :**
+| Modèle | Indice | Coût par tâche | Comparaison |
+|---|---|---|---|
+| Kimi K3.1 Pro | 46 | 3,68 $ | Sonnet 5.5 : 55 / 10,02 $ ; GPT-6.1 Sol : 55 / 1,27 $ |
+| DeepSeek V4.1 Flash (max) | 33 | 0,60 $ | Haiku 5.5 : 30 / 0,16 $ |
+| GLM-5.3 (max) / Flash | 32 / 28 | 5,01 $ / 0,58 $ | |
+| Qwen3.8 Max / Flash-Next | 34 / 29 | 10,02 $ / 0,57 $ | |
+| MiniMax-M3.1-Flash / M3 | 29 / 19 | 0,49 $ / 1,29 $ | |
+| Xiaomi MiMo-V2.6-Pro / Flash | 30 / 27 | 0,26 $ / 0,13 $ | |
+| DeepSeek V4 Pro 0813 (max) | **23** | 1,77 $ | pire que Flash : ne pas le choisir |
+**Ce que ça veut dire :**
+- Aucun modèle chinois n'atteint Sonnet 5.5 (55) sur cet indice ; le meilleur, Kimi K3.1 Pro (46), coûte 3 fois plus par tâche que GPT-6.1 Sol, qui fait mieux. **Ils ne sont pas moins chers à qualité égale que GPT-6.1 Sol.**
+- En bas de gamme, DeepSeek V4.1 Flash (33) fait un peu mieux que Haiku 5.5 (30) mais coûte environ 4 fois plus par tâche sur cet indice. Son prix au token est comparable à Haiku (0,15/0,60 contre 0,10/0,50) : il n'apporte rien d'économique pour nous.
+- Les blogs annoncent d'autres chiffres (Kimi K3 à 57, GLM-5.2 à 51) : versions d'indice et dates qui diffèrent, **non retenus** ; seul le tableau officiel ci-dessus est utilisé.
+- Leur avantage réel : poids ouverts (Kimi K3.1 Pro, GLM, DeepSeek), donc hébergeables par un tiers. Cela ne vaut pour nous que si un hébergeur hors de Chine est choisi après lecture de ses conditions : **non fait**.
+**Confidentialité (DeepSeek, conditions lues) :** services fournis par une société chinoise, données collectées et stockées en Chine, **loi chinoise** et tribunal de Hangzhou pour l'API ; la politique de l'application dit que les entrées peuvent servir à entraîner leurs modèles (opposition possible par e-mail, pas de réglage libre-service). La politique ne décrit pas le traitement des entrées de l'API. **Règle : aucune donnée de client, aucun brouillon non publié, aucun chiffre interne.** Utilisable seulement pour des textes déjà publics.
+**Décision :** aucun agent du profil `equilibre` ni `max` n'utilise un modèle chinois. DeepSeek V4.1 Flash reste une option dans `eco` pour le veilleur sur textes publics. Pas de gain démontré, risque réel : les revoir si un nouveau modèle change l'indice ou si un hébergeur tiers est vérifié.
 
 ## 8. Ce qui reste à faire (et par qui)
 - **Ben** : donner ses propres clés (OpenAI, Google, DeepSeek) seulement s'il veut tester ces fournisseurs ; faire la notation à l'aveugle de `evals/` (une heure).

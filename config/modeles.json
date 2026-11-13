@@ -27,11 +27,34 @@
       }
     },
     "deepseek": {
-      "outil": "OpenCode ou passerelle (LiteLLM, OpenRouter)",
+      "outil": "Claude Code (point d'accès Anthropic officiel : https://api.deepseek.com/anthropic) ou OpenCode",
       "modeles": {
-        "flash": { "id": "deepseek-flash", "prix": "0,15 $ / 0,60 $ (hors pointe), 0,30 $ / 1,20 $ (pointe)", "source": "api-docs.deepseek.com/quick_start/pricing" },
-        "pro": { "id": "deepseek-v4-pro", "prix": "0,66 $ / 1,98 $ (hors pointe)", "source": "idem" }
-      }
+        "flash": { "id": "deepseek-flash", "prix": "0,15 $ / 0,60 $ (hors pointe), 0,30 $ / 1,20 $ (pointe)", "source": "api-docs.deepseek.com/quick_start/pricing", "note": "Artificial Analysis : indice 33, 0,60 $ par tâche (max)" },
+        "pro": { "id": "deepseek-v4-pro", "prix": "0,66 $ / 1,98 $ (hors pointe)", "source": "idem", "note": "Artificial Analysis : indice 23 seulement, 1,77 $ par tâche : moins bon que Flash, ne pas choisir" }
+      },
+      "confidentialite": "Données traitées en Chine, droit chinois, entrées pouvant servir à l'entraînement (politique de l'appli) : textes non confidentiels seulement"
+    },
+    "moonshot": {
+      "outil": "OpenCode ou passerelle ; point d'accès Anthropic non confirmé par la documentation officielle",
+      "modeles": {
+        "k3.1-pro": { "id": "kimi-k3.1-pro", "prix": "2 $ / 10 $ (rapporté par des blogs, tableau officiel illisible)", "source": "platform.kimi.ai/docs", "note": "poids ouverts ; Artificial Analysis : indice 46, 3,68 $ par tâche" }
+      },
+      "confidentialite": "conditions non lues"
+    },
+    "alibaba": {
+      "outil": "OpenCode ou passerelle",
+      "modeles": {
+        "qwen3.8-flash": { "id": null, "prix": "0,15 $ / 0,47 $ (rapporté, région Singapour)", "source": "alibabacloud.com/help/en/model-studio", "note": "Artificial Analysis : indice 29 (Flash-Next), 0,57 $ par tâche" },
+        "qwen3.8-max": { "id": null, "prix": "2 $ / 6 $ (rapporté)", "source": "idem", "note": "Artificial Analysis : indice 34 pour 10,02 $ par tâche : très cher pour ce qu'il donne" }
+      },
+      "confidentialite": "conditions non lues"
+    },
+    "zai": {
+      "outil": "OpenCode ou passerelle",
+      "modeles": {
+        "glm-5.3": { "id": null, "prix": "non vérifié (GLM-5.2 rapporté 1,40 $ / 4,40 $)", "source": "docs.z.ai non lu", "note": "Artificial Analysis : GLM-5.3 indice 32, 5,01 $ par tâche ; GLM-5.3-Flash 28, 0,58 $" }
+      },
+      "confidentialite": "conditions non lues"
     },
     "google": {
       "outil": "Gemini CLI",
@@ -68,7 +91,7 @@
       "benchmarks": ["Vectara HHEM (fidélité aux documents lus)", "test maison : 10 questions à réponse connue (evals/)"],
       "modeles": {
         "eco": { "anthropic": "haiku", "openai": "luna", "deepseek": "flash" },
-        "equilibre": { "anthropic": "sonnet", "openai": "terra", "deepseek": "pro" },
+        "equilibre": { "anthropic": "sonnet", "openai": "terra", "deepseek": "flash" },
         "max": { "anthropic": "opus", "openai": "sol" }
       }
     },
