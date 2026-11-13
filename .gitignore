@@ -22,3 +22,6 @@ audit-*/
 studio/.git.upstream/
 .DS_Store
 Thumbs.db
+
+# Réponses du jeu de test (contiennent des données de clients)
+evals/resultats/

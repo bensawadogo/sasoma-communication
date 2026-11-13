@@ -2,7 +2,13 @@
 
 Aucun benchmark public ne mesure le community management, le français du Burkina, ni les langues locales (voir `docs/19`). Ce jeu de test les remplace : il compare **des modèles sur nos tâches**, avec **ta** note.
 
-## Méthode (une heure, coût de quelques centimes)
+## Lancement automatique (une fois la clé OpenRouter posée, `docs/20`)
+1. `node scripts/delegue-ia/lancer-eval.mjs` : estime le coût maximal des 27 appels (environ 0,66 $) sans rien envoyer.
+2. Après l'accord de Ben sur ce montant : `node scripts/delegue-ia/lancer-eval.mjs --oui 0.70` (ou `--agent <nom>` pour un seul agent).
+3. Les réponses arrivent **sans nom de modèle** (A, B, C mélangées) dans `evals/resultats/<agent>/`, avec une fiche `notes.md` à remplir. Ben note, puis seulement après ouvre `_CLE.json`.
+Les tâches et leurs données d'exercice sont dans `taches.json`. `veilleur` et `programmateur` n'y sont pas : ils ont besoin d'outils (recherche web, Metricool) que la délégation ne donne pas, ils restent sur Claude. Le dossier `resultats/` n'est pas poussé sur GitHub (données de clients).
+
+## Méthode à la main (une heure, coût de quelques centimes)
 1. Pour un agent, prends sa tâche dans `jeu-de-test.md`.
 2. Lance la même tâche avec 2 ou 3 modèles (profil `eco`, `equilibre`, `max` : `node scripts/profil-modele.mjs <profil>`, ou un autre outil généré par `node scripts/exporter-agents.mjs`). Enregistre chaque réponse dans `evals/resultats/<agent>-<modele>.md`.
 3. **À l'aveugle** : renomme les fichiers A, B, C avant de noter, pour ne pas juger sur le nom.

@@ -1,0 +1,63 @@
+{
+  "_commentaire": "Tâches du jeu de test (voir jeu-de-test.md). Données d'entrée : fichiers du projet et textes d'exercice. Les tâches « fictif » contiennent des données inventées pour l'exercice, jamais des chiffres de client. veilleur et programmateur ne sont pas testables ici : ils ont besoin d'outils (recherche web, Metricool) que la délégation ne donne pas, ils restent sur Claude.",
+  "taches": {
+    "chef-de-studio": {
+      "modeles": ["opus", "sol", "sonnet"],
+      "tache": "Prépare le plan d'une mission : 4 semaines de contenu pour SASOMA, thème : l'entretien du moteur en saison chaude. Réponds par un tableau (n°, tâche, agent, dépend de, état, livrable), puis nomme les 3 portes de Ben et ce qui attend chacune.",
+      "fichiers": ["clients/sasoma.md", "docs/11-ORGANISATION-DE-L-EQUIPE.md", "docs/03-PROCESSUS-CM.md"],
+      "attendu": "Plan en tableau, tâches réparties entre les bons agents (veilleur, stratege, scenariste, createur-visuel, controleur, programmateur), 3 portes nommées, aucun agent hors rôle, rien d'envoyé ni de publié."
+    },
+    "controleur": {
+      "modeles": ["opus", "sol", "sonnet"],
+      "tache": "Contrôle ce brouillon contre la checklist de 9 points et les règles absolues. Donne le verdict (à corriger ou prêt pour Ben) et liste chaque défaut.",
+      "contexte": "BROUILLON À CONTRÔLER (post Facebook pour SASOMA, exercice)\nMédia : image du bidon Petrovöll 5W-30, « générée par IA, rendu studio » (fichier bidon_ia_v2.png).\nTexte : « Avec Petrovöll, votre moteur dure 40 % plus longtemps. Un client nous a écrit : « Produit moyen, service lent », mais on s'améliore ! Commandez maintenant avec le bouton WhatsApp. »\nBouton WhatsApp : numéro non renseigné.\nSource du chiffre de 40 % : aucune.",
+      "fichiers": ["knowledge/lecons.md"],
+      "attendu": "Les 4 défauts trouvés (bidon généré par IA, chiffre sans source, avis négatif cité, bouton WhatsApp sans numéro), verdict « à corriger », aucune complaisance."
+    },
+    "stratege": {
+      "modeles": ["sonnet", "terra", "hydrogen"],
+      "tache": "10 idées d'histoires pour SASOMA, avec le format et le réseau pour chacune.",
+      "fichiers": ["clients/sasoma.md", "knowledge/afrique-de-l-ouest.md"],
+      "attendu": "Idées variées et adaptées au Burkina, faits non inventés (le public « à renseigner » est signalé), réseau choisi avec les chiffres du savoir partagé."
+    },
+    "scenariste": {
+      "modeles": ["sonnet", "hydrogen", "sol"],
+      "tache": "Écris un scénario de 3 à 5 plans, une légende et 5 mots-clés pour l'histoire : « La chaleur met le moteur à rude épreuve : pourquoi l'huile compte ». Format : vidéo courte pour Facebook.",
+      "contexte": "Seuls faits sourcés utilisables sur le produit (SOURCES.md du 03/10/2026) :\n1. Petrovöll est fabriqué par Petrovöll GmbH, à Bochum, en Allemagne.\n2. Le site officiel présente des huiles moteur essence et diesel, des huiles moto et marine, des huiles industrielles, des liquides de frein et des liquides de refroidissement.\n3. Le site officiel ne publie ni fiche technique PDF ni catalogue PDF.\nUne vraie photo du bidon sera fournie par SASOMA : tu ne la génères pas.",
+      "fichiers": ["clients/sasoma.md"],
+      "attendu": "Français naturel, seuls les 3 faits utilisés, aucune promesse de durée de vie du moteur, le produit montré par une vraie photo (à fournir), pas de texte de marque généré."
+    },
+    "createur-visuel": {
+      "modeles": ["sonnet", "terra", "luna"],
+      "tache": "Écris le brief visuel pour ce scénario. Génère aussi l'image du bidon.",
+      "contexte": "Scénario : plan 1, route poussiéreuse au soleil, un camion démarre ; plan 2, gros plan sur un moteur qui chauffe ; plan 3, la vraie photo du bidon posée sur un établi ; plan 4, le camion repart. Vertical 9:16, Facebook.",
+      "fichiers": ["clients/sasoma.md"],
+      "attendu": "Brief précis (plans, format, cadrage), REFUSE de générer le bidon et le dit, demande la vraie photo."
+    },
+    "publicitaire": {
+      "modeles": ["sonnet", "terra", "luna"],
+      "tache": "Écris le brief de campagne : budget plafonné à 30 000 FCFA, objectif : messages WhatsApp, réseau : Facebook.",
+      "fichiers": ["clients/sasoma.md", "knowledge/afrique-de-l-ouest.md"],
+      "attendu": "Un seul objectif, plafond écrit, mesure choisie avant le lancement, aucune promesse de résultat chiffrée inventée, rien de créé ni lancé."
+    },
+    "analyste": {
+      "modeles": ["sonnet", "terra", "luna"],
+      "tache": "Fais le bilan de ce tableau (données d'exercice). Cite les chiffres exacts, signale ce qui manque, et dis ce qu'on peut et ne peut pas en conclure.",
+      "contexte": "DONNÉES D'EXERCICE (fictives)\nSemaine | Posts | Portée | Clics WhatsApp\nS1 | 3 | 1200 | 14\nS2 | 3 | 1450 | 18\nS3 | 2 | (vide) | 9\nS4 | 3 | 1900 | 22\nS5 | 3 | 1750 | 19\nS6 | 2 | 1100 | 7\nS7 | 3 | 2100 | 25",
+      "fichiers": [],
+      "attendu": "Chiffres exacts, la case vide (portée de S3) signalée, aucune valeur estimée présentée comme un résultat, prudence sur la cause."
+    },
+    "formateur": {
+      "modeles": ["sonnet", "terra", "luna"],
+      "tache": "Écris une fiche de 10 lignes pour une secrétaire d'entreprise : pourquoi on ne génère jamais l'image du bidon avec une IA.",
+      "fichiers": ["docs/04-FORMATION-SECRETAIRES.md"],
+      "attendu": "Phrases courtes, un exemple concret, 2 questions d'auto-contrôle, 10 lignes environ, français simple."
+    },
+    "commercial": {
+      "modeles": ["sonnet", "terra", "luna"],
+      "tache": "Écris la proposition d'une page pour une entreprise informatique qui a reçu un logo animé gratuit. Mets les prix.",
+      "fichiers": ["brouillons/proposition-une-page-MODELE.md", "docs/05-VERIFICATIONS-ET-HYPOTHESES.md"],
+      "attendu": "Prix laissés entre crochets ou signalés « à fixer par Ben » (Ben ne les a pas fixés pour ce client), aucune promesse de résultat, rien d'envoyé."
+    }
+  }
+}

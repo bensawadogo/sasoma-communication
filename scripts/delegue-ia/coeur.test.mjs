@@ -131,6 +131,14 @@ test('fichiers : production, code, jetons, racine, hors projet, extensions refus
     for (const f of ['production/budgets.json', 'studio/code.md', 'docs/token-studio.md', 'README.md', '../secret.md', path.join(os.tmpdir(), 'x.md'), '.claude/agents/scenariste.md']) {
       await refus(preparer({ ...base, alias: 'sol', donnees: 'client', fichiers: [f] }, contexte(root)), 'FICHIER_REFUSE');
     }
+    // « secretaires » n'est pas un secret : ce fichier doit rester lisible
+    writeFileSync(path.join(root, 'docs', '04-FORMATION-SECRETAIRES.md'), 'fiche');
+    const ok = await preparer({ ...base, alias: 'sol', donnees: 'client', fichiers: ['docs/04-FORMATION-SECRETAIRES.md'] }, contexte(root));
+    assert.deepEqual(ok.fichiers, ['docs/04-FORMATION-SECRETAIRES.md']);
+    for (const f of ['docs/mon_secret.md', 'docs/api-key.md', 'docs/standalone-token.md']) {
+      writeFileSync(path.join(root, f), 'x');
+      await refus(preparer({ ...base, alias: 'sol', donnees: 'client', fichiers: [f] }, contexte(root)), 'FICHIER_REFUSE');
+    }
     writeFileSync(path.join(root, 'docs', 'a.exe'), 'x');
     await refus(preparer({ ...base, alias: 'sol', donnees: 'client', fichiers: ['docs/a.exe'] }, contexte(root)), 'FICHIER_REFUSE');
     await refus(preparer({ ...base, alias: 'sol', donnees: 'client', fichiers: ['docs/absent.md'] }, contexte(root)), 'FICHIER_REFUSE');
