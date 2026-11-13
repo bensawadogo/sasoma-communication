@@ -16,6 +16,8 @@ export const PERIMETRES = {
     dossiers: ['production', 'brouillons', 'clients', memoire('chef-de-studio')],
     fichiers: ['knowledge/lecons.md'],
   },
+  // L'inspirateur n'écrit que ses carnets d'inspiration (mots-clés, grille de tri, direction de l'histoire).
+  inspirateur: { dossiers: ['production/inspirations', memoire('inspirateur')] },
   veilleur: { dossiers: ['recherches', 'knowledge', memoire('veilleur')] },
   stratege: { dossiers: ['brouillons', 'production', memoire('stratege')] },
   scenariste: { dossiers: ['brouillons', 'production', memoire('scenariste')] },

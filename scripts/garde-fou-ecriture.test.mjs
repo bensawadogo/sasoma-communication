@@ -74,3 +74,10 @@ test('le traceur écrit ses kits de pixel, et rien d\'autre (ni le site d\'un cl
   // les autres agents ne touchent pas à ses kits, sauf ceux qui écrivent dans production/
   assert.equal(decider('formateur', p('production/pixels/sasoma/pixel-base.html')).ok, false);
 });
+
+test("l'inspirateur écrit ses carnets d'inspiration, et rien d'autre", () => {
+  assert.equal(decider('inspirateur', p('production/inspirations/sasoma/chaleur.md')).ok, true);
+  assert.equal(decider('inspirateur', p('production/plans/x.md')).ok, false);
+  assert.equal(decider('inspirateur', p('brouillons/x.md')).ok, false);
+  assert.equal(decider('inspirateur', p('clients/sasoma.md')).ok, false);
+});

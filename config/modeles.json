@@ -402,6 +402,28 @@
           "openai": "sol"
         }
       }
+    },
+    "inspirateur": {
+      "metier": "Mots-clés Pinterest, tri de vraies références professionnelles, direction de l'histoire avant le scénario.",
+      "critere": "Créativité sourcée, goût visuel, aucune invention de fait ou d'audience.",
+      "benchmarks": [
+        "Arena, catégorie Creative Writing (11/11/2026)",
+        "test maison : carnet d'inspiration pour un thème (evals/)"
+      ],
+      "modeles": {
+        "eco": {
+          "anthropic": "haiku",
+          "openai": "luna"
+        },
+        "equilibre": {
+          "anthropic": "sonnet",
+          "openai": "terra"
+        },
+        "max": {
+          "anthropic": "opus",
+          "openai": "sol"
+        }
+      }
     }
   }
 }

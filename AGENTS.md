@@ -18,6 +18,7 @@ Service de community management : on propose, **Ben décide**. Contexte complet 
 | `controleur` | Vérifie un post contre la checklist de 9 points et les sources. Cherche ce qui ne va pas. |
 | `createur-visuel` | Briefs visuels et gabarits. Aucun rendu payant. |
 | `formateur` | Fiches, exercices et jeux pour les secrétaires, en français simple. |
+| `inspirateur` | Mots-clés Pinterest, tri de vraies références professionnelles, direction de l'histoire avant le scénario. |
 | `programmateur` | Crée les posts validés en mode revue dans Metricool. |
 | `publicitaire` | Briefs de campagne et lecture des chiffres publicitaires. |
 | `scenariste` | Scénarios courts, légendes, mots-clés, en français et au ton du client. |
