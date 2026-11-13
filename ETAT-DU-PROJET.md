@@ -10,7 +10,7 @@ Ce fichier est la **mémoire commune** du projet. Il ne dépend d'aucun outil : 
 - Il veut des **décisions et des actes**, pas des listes d'options sans recommandation. Il veut aussi l'honnêteté : ce qui est vérifié, ce qui ne l'est pas, ce qui n'a pas été testé.
 - **Faits vérifiés seulement** (sources officielles ou fichiers du projet), jamais de chiffre inventé.
 - **Coût annoncé avant** tout outil payant. Rien n'est publié, envoyé ni créé chez un tiers sans l'accord de Ben (3 portes : calendrier, chaque post, programmation).
-- **Le bidon Petrovöll n'est jamais généré par IA** : uniquement de vraies photos.
+- **Le bidon Petrovöll n'est jamais généré par IA** : uniquement de vraies images (packshots officiels de petrovoll.com, 36 fichiers dans `C:SITE-SASOMAassetscataloguespetrovollphotos`, ou photo au téléphone). **Tout le reste (scènes, ambiances, personnes, décors, motion) peut être généré par IA** : Ben n'a pas de caméra (précisé le 13/11/2026).
 - Aucune plateforme ni abonnement imposé aux clients (`docs/01`).
 - Ne jamais copier un jeton, une clé ou un lien du Studio dans un message, un fichier ou un envoi à une autre IA.
 
@@ -44,6 +44,7 @@ Ce fichier est la **mémoire commune** du projet. Il ne dépend d'aucun outil : 
 - Agents : analyste, andromeda, chef-de-studio, commercial, controleur, createur-visuel, formateur, inspirateur, programmateur, publicitaire, scenariste, stratege, traceur, veilleur
 - Autres IA via OpenRouter : 0 appel(s), 0.0000 $ dépensés au total (journal sans contenu)
 - Derniers changements :
+- 9db24f5 Agent andromeda (regles de diffusion Meta : diversite creative, audit, structure) + fiche sourcee knowledge/andromeda-meta.md
 - 2c73898 Agent inspirateur (Pinterest : mots-cles, vraies references, direction de l'histoire)
 - df81a74 docs/22 : Meta Ads et pixels sur mesure ; etat du projet
 - caa5a9c Agent traceur (pixel Meta sur mesure), OpenCode: motifs de droits ancres (testes avec un vrai modele), docs
@@ -51,7 +52,6 @@ Ce fichier est la **mémoire commune** du projet. Il ne dépend d'aucun outil : 
 - f684d85 Studio : photos dans le popup de conversation (reduites, metadonnees retirees, enregistrees pour l'agent)
 - 4eb1364 delegue-ia : photos (metadonnees retirees, classe client), doc terminal OpenCode
 - 731594a Jeu de test automatise : taches, lanceur a l'aveugle, estimation avant envoi
-- 5318ef9 delegue-ia : nettoyage des e-mails en temps lineaire
 - Tâches ouvertes dans TODO.md (12 affichées) :
   - B : donner ses heures disponibles par mois et son revenu visé (pour calculer les prix).
   - B : donner la liste des entreprises ayant reçu un logo animé (secteur, taille, présence Facebook).

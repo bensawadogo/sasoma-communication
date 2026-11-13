@@ -33,7 +33,7 @@ Légende : **[Meta]** écrit par Meta · **[Tiers]** avis de praticiens ou d'age
 - Effet de chaque amélioration automatique d'Advantage+ sur une image réelle de produit.
 
 ## Conséquences pour le studio (règles du studio, pas de Meta)
-1. **La diversité vient de vraies photos et de vrais gestes** : angles, lieux, personnes, saisons, questions de clients, formats. Jamais d'un bidon, d'un logo ou d'un texte de marque généré par IA.
-2. **Les améliorations génératives d'Advantage+ (arrière-plan généré, retouche d'image, génération de texte)** : désactivées par défaut sur toute image de produit Petrovöll. Ben décide cas par cas, après avoir vu le résultat.
+1. **La diversité vient des scènes, personnes, lieux, messages et formats, générés par IA ou réels** (Ben n'a pas de caméra). Limite absolue : jamais un bidon, une étiquette, un logo ou un texte de marque généré par IA ; le produit est incrusté depuis une vraie image.
+2. **Les améliorations génératives d'Advantage+ (arrière-plan généré, retouche d'image, génération de texte)** : désactivées par défaut sur toute image où le produit apparaît (risque de déformer l'étiquette). Ben décide après un essai qu'il a regardé.
 3. Pas de promesse de performance ni de portée à un client : les chiffres de Meta sont des moyennes publiées par Meta.
 4. Une campagne payante sans plan de suivi du traceur n'est pas lancée.
