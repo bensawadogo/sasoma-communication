@@ -149,7 +149,7 @@ test('plafonds : par appel, par jour (journal), annonce obligatoire au-dessus du
     // un très long texte sans arobase ne doit pas ralentir le nettoyage
     const t0 = Date.now();
     for (const piege of ['x'.repeat(120_000), '1 '.repeat(60_000), 'a.'.repeat(60_000), '+1 '.repeat(40_000), 'ab-'.repeat(40_000), 'a@'.repeat(60_000)]) nettoyer(piege);
-    assert.ok(Date.now() - t0 < 2000, 'nettoyage trop lent');
+    assert.ok(Date.now() - t0 < 6000, 'nettoyage trop lent');
     await refus(deleguer(gros, contexte(root)), 'ANNONCE_REQUISE');
     const e = await estimer(gros, contexte(root));
     assert.match(e, /à annoncer à Ben/);

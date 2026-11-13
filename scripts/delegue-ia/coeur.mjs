@@ -30,7 +30,7 @@ const MOTIFS = [
   ['cle', /\bBearer\s+[A-Za-z0-9._~+/=-]{16,}/gi, 'Bearer [CLE-MASQUEE]'],
   ['cle', /([?&]token=)[^\s&"')]+/gi, '$1[CLE-MASQUEE]'],
   // longueurs bornées : évite un temps de calcul quadratique sur un long texte sans arobase
-  ['email', /[\w.+-]{1,64}@[\w-]{1,63}(?:\.[\w-]{1,63}){1,5}/g, '[EMAIL-MASQUE]'],
+  ['email', /(?<![\w.+-])[\w.+-]{1,254}@[\w-]{1,63}(?:\.[\w-]{1,63}){1,5}/g, '[EMAIL-MASQUE]'],
   ['telephone', /(?<![\w])\+\d{1,3}[\s.-]?\d(?:[\s.-]?\d){6,}/g, '[TEL-MASQUE]'],
   ['telephone', /\b(?:226[\s.-]?)?\d{2}(?:[\s.-]\d{2}){3}\b/g, '[TEL-MASQUE]'],
 ];
