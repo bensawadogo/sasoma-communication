@@ -1,0 +1,24 @@
+# Dépendances et compilations (se refont avec npm install / npm run build)
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Données de travail et secrets : jamais dans le dépôt
+.env
+.env.*
+*.pem
+*.key
+production/*.jsonl
+production/budgets.json
+production/tokens.jsonl
+production/quests.jsonl
+.claude/agent-memory/
+.claude/settings.local.json
+rem-run/
+audit-*/
+*.log
+
+# Copie locale de l'historique du dépôt d'origine du Studio (voir studio/UPSTREAM.md)
+studio/.git.upstream/
+.DS_Store
+Thumbs.db

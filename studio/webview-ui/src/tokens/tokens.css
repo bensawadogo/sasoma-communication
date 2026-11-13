@@ -1,0 +1,79 @@
+/* Barre des tokens : en haut du bureau, au centre, au-dessus du canevas et sous les fenêtres. */
+
+.token-bar {
+  position: fixed;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  display: flex;
+  gap: 6px;
+  max-width: calc(100vw - 130px);
+  overflow-x: auto;
+  padding: 4px 6px;
+  border: 2px solid #4a4a6a;
+  background: #1e1e2e;
+  box-shadow: 2px 2px 0 #0a0a14;
+  color: #e6e6ee;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1.1;
+  /* La barre ne vole pas les glissements du canevas qu'elle recouvre à peine. */
+  touch-action: manipulation;
+}
+
+.token-bar:focus-visible {
+  outline: 3px solid #746fff;
+  outline-offset: 2px;
+}
+
+.token-chip {
+  position: relative;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 72px;
+  padding: 2px 8px 4px;
+  border: 2px solid #33334a;
+  background: #252538;
+  text-align: left;
+}
+
+.token-chip[data-connected='false'] {
+  opacity: 0.55;
+}
+
+.token-chip-name {
+  color: #8a8aa6;
+  font-size: 16px;
+}
+
+.token-chip-value {
+  color: #e6e6ee;
+}
+
+.token-chip-meter {
+  display: block;
+  height: 6px;
+  margin-top: 2px;
+  background: #0a0a14;
+}
+
+.token-chip-meter > span {
+  display: block;
+  height: 100%;
+  background: #89d185;
+}
+
+.token-chip[data-tone='warn'] .token-chip-meter > span {
+  background: #cca700;
+}
+
+.token-chip[data-tone='high'] {
+  border-color: #d14249;
+}
+
+.token-chip[data-tone='high'] .token-chip-meter > span {
+  background: #d14249;
+}

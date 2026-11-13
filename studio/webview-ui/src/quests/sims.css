@@ -1,0 +1,690 @@
+/*
+ * Look "Sims" du panneau Quêtes : cadre bleu glacé, cartes blanches arrondies, plumbob vert,
+ * barres de besoin brillantes. Règles suivies (skills game-ui-ux et game-feel) :
+ *  - texte jamais sous 18 px, cibles tactiles d'au moins 44 px ;
+ *  - jamais la couleur seule : chaque état a aussi un texte ou une forme ;
+ *  - retours animés courts (pop avec dépassement, barre qui se remplit) qui reviennent toujours au repos ;
+ *  - tout mouvement est coupé si l'appareil demande « réduire les animations ».
+ */
+
+.sims-root {
+  --sims-ink: #0f3a56;
+  --sims-ink-soft: #3d6580;
+  --sims-card: #ffffff;
+  --sims-frame-top: #d9f0fb;
+  --sims-frame-bottom: #9fd0ea;
+  --sims-line: #7fb6d3;
+  --sims-green: #3fc24a;
+  --sims-green-dark: #26962f;
+  --sims-yellow: #f2c230;
+  --sims-orange: #f08a24;
+  --sims-red: #e0463f;
+  --sims-blue: #2f8fd6;
+  --sims-shadow: 0 2px 0 rgba(15, 58, 86, 0.22), 0 6px 14px rgba(15, 58, 86, 0.18);
+
+  position: relative;
+  padding: 12px;
+  color: var(--sims-ink);
+  background: linear-gradient(180deg, var(--sims-frame-top), var(--sims-frame-bottom));
+  border: 3px solid #ffffff;
+  border-radius: 18px;
+  box-shadow: inset 0 0 0 2px var(--sims-line), var(--sims-shadow);
+  font-size: 19px;
+  line-height: 1.35;
+}
+
+.sims-root,
+.sims-root * {
+  font-family: 'Trebuchet MS', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  box-sizing: border-box;
+}
+
+.sims-muted {
+  color: var(--sims-ink-soft);
+}
+
+/* Couleurs du plumbob par humeur. */
+.sims-tone-green {
+  --pb-light: #b6ff9c;
+  --pb-mid: #3fc24a;
+  --pb-dark: #1f7d29;
+}
+.sims-tone-orange {
+  --pb-light: #ffd29a;
+  --pb-mid: #f08a24;
+  --pb-dark: #a85a0c;
+}
+.sims-tone-gold {
+  --pb-light: #fff3a0;
+  --pb-mid: #f2c230;
+  --pb-dark: #b68a0a;
+}
+.sims-pb-light {
+  stop-color: var(--pb-light);
+}
+.sims-pb-mid {
+  stop-color: var(--pb-mid);
+}
+.sims-pb-dark {
+  stop-color: var(--pb-dark);
+}
+.sims-pb-edge {
+  stroke: var(--pb-dark);
+}
+.sims-pb-hi {
+  fill: #ffffff;
+  opacity: 0.35;
+}
+.sims-pb-lo {
+  fill: #000000;
+  opacity: 0.12;
+}
+.sims-plumbob-inline {
+  flex: none;
+  width: 22px;
+  height: 32px;
+}
+
+/* ── Onglets ────────────────────────────────────────────────── */
+
+.sims-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.sims-tab {
+  flex: 1;
+  min-height: 46px;
+  border: 2px solid var(--sims-line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  color: var(--sims-ink);
+  font-size: 19px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 120ms cubic-bezier(0.3, 1.6, 0.5, 1), background 120ms;
+}
+
+.sims-tab[aria-selected='true'] {
+  background: #ffffff;
+  border-color: var(--sims-blue);
+  box-shadow: 0 2px 0 var(--sims-blue);
+}
+
+.sims-tab:active {
+  transform: scale(0.96, 0.92);
+}
+
+/* ── Cartes ─────────────────────────────────────────────────── */
+
+.sims-card {
+  background: var(--sims-card);
+  border: 2px solid var(--sims-line);
+  border-radius: 16px;
+  padding: 12px;
+  box-shadow: var(--sims-shadow);
+}
+
+.sims-card[data-state='gate'] {
+  border-color: var(--sims-orange);
+  box-shadow: 0 0 0 3px rgba(240, 138, 36, 0.28), var(--sims-shadow);
+}
+
+.sims-card[data-state='done'] {
+  border-color: var(--sims-green);
+}
+
+.sims-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sims-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sims-title {
+  font-size: 21px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.sims-small {
+  font-size: 18px;
+}
+
+/* ── Personnage + plumbob ───────────────────────────────────── */
+
+.sims-avatar {
+  position: relative;
+  flex: none;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 26px;
+  font-weight: 800;
+  color: #ffffff;
+  background: radial-gradient(circle at 35% 30%, #6fc4f2, #2f8fd6 70%);
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 0 2px var(--sims-line), 0 3px 6px rgba(15, 58, 86, 0.3);
+}
+
+.sims-plumbob {
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  width: 22px;
+  height: 32px;
+  margin-left: -11px;
+  filter: drop-shadow(0 2px 2px rgba(15, 58, 86, 0.35));
+  animation: sims-bob 2.2s ease-in-out infinite;
+}
+
+@keyframes sims-bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-4deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(4deg);
+  }
+}
+
+.sims-mood {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 700;
+  background: #ffffff;
+  border: 2px solid var(--sims-green);
+}
+
+.sims-mood[data-tone='wait'] {
+  border-color: var(--sims-orange);
+  background: #fff3e2;
+}
+
+.sims-mood[data-tone='alert'] {
+  border-color: var(--sims-red);
+  background: #ffeceb;
+}
+
+/* ── Barres de besoin ───────────────────────────────────────── */
+
+.sims-need {
+  position: relative;
+  height: 20px;
+  margin-top: 6px;
+  border-radius: 999px;
+  background: #cfe3ee;
+  border: 2px solid var(--sims-ink);
+  overflow: hidden;
+}
+
+.sims-need-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #8df07d 0%, var(--sims-green) 45%, var(--sims-green-dark) 100%);
+  /* Remplissage amorti : la barre rattrape sa valeur sans sauter. */
+  transition: width 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sims-need-fill[data-tone='mid'] {
+  background: linear-gradient(180deg, #ffe58a 0%, var(--sims-yellow) 50%, #c99a10 100%);
+}
+
+.sims-need-fill[data-tone='low'] {
+  background: linear-gradient(180deg, #ffbf80 0%, var(--sims-orange) 50%, #b8620f 100%);
+}
+
+/* Reflet brillant en haut de la barre. */
+.sims-need-fill::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  top: 2px;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+/* ── Parcours d'une mission ─────────────────────────────────── */
+
+.sims-path {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 10px 0 4px;
+  padding: 0;
+}
+
+.sims-path li {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.sims-path li:last-child {
+  flex: none;
+}
+
+.sims-node {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  font-weight: 800;
+  color: #ffffff;
+  background: #b9d3e2;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 2px var(--sims-line);
+}
+
+.sims-node[data-state='done'] {
+  background: var(--sims-green);
+  box-shadow: 0 0 0 2px var(--sims-green-dark);
+}
+
+.sims-node[data-state='current'] {
+  background: var(--sims-blue);
+  box-shadow: 0 0 0 3px rgba(47, 143, 214, 0.45);
+  animation: sims-ping 1.6s ease-in-out infinite;
+}
+
+/* Les portes sont des losanges orange : forme différente, pas seulement une couleur. */
+.sims-node[data-gate='true'] {
+  border-radius: 5px;
+  transform: rotate(45deg);
+  width: 22px;
+  height: 22px;
+  margin: 0 3px;
+  background: #ffe2bd;
+  box-shadow: 0 0 0 2px var(--sims-orange);
+}
+
+.sims-node[data-gate='true'] > span {
+  transform: rotate(-45deg);
+}
+
+.sims-node[data-gate='true'][data-state='done'] {
+  background: var(--sims-green);
+  box-shadow: 0 0 0 2px var(--sims-green-dark);
+}
+
+.sims-node[data-gate='true'][data-state='current'] {
+  background: var(--sims-orange);
+  animation: sims-ping-gate 1.6s ease-in-out infinite;
+}
+
+.sims-link {
+  flex: 1;
+  height: 4px;
+  margin: 0 3px;
+  border-radius: 2px;
+  background: #b9d3e2;
+}
+
+.sims-link[data-done='true'] {
+  background: var(--sims-green);
+}
+
+@keyframes sims-ping {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.12);
+  }
+}
+
+@keyframes sims-ping-gate {
+  0%,
+  100% {
+    transform: rotate(45deg) scale(1);
+  }
+  50% {
+    transform: rotate(45deg) scale(1.15);
+  }
+}
+
+/* ── Boutons ────────────────────────────────────────────────── */
+
+.sims-btn {
+  min-height: 46px;
+  padding: 0 18px;
+  border: 2px solid var(--sims-green-dark);
+  border-radius: 999px;
+  background: linear-gradient(180deg, #8df07d 0%, var(--sims-green) 55%, var(--sims-green-dark) 100%);
+  color: #ffffff;
+  font-size: 19px;
+  font-weight: 800;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  box-shadow: 0 3px 0 var(--sims-green-dark), 0 6px 10px rgba(15, 58, 86, 0.2);
+  /* Écrasement à l'appui puis retour avec dépassement : le bouton a du poids. */
+  transition: transform 140ms cubic-bezier(0.3, 1.7, 0.5, 1), box-shadow 140ms;
+}
+
+.sims-btn:active:not(:disabled) {
+  transform: translateY(2px) scale(0.97, 0.93);
+  box-shadow: 0 1px 0 var(--sims-green-dark);
+}
+
+.sims-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sims-btn[data-kind='plain'] {
+  background: #ffffff;
+  color: var(--sims-ink);
+  text-shadow: none;
+  border-color: var(--sims-line);
+  box-shadow: 0 3px 0 var(--sims-line);
+}
+
+.sims-btn[data-kind='danger'] {
+  background: linear-gradient(180deg, #ff9d96 0%, var(--sims-red) 60%, #b02e28 100%);
+  border-color: #b02e28;
+  box-shadow: 0 3px 0 #b02e28;
+}
+
+.sims-btn:focus-visible,
+.sims-tab:focus-visible,
+.sims-toggle:focus-within,
+.sims-input:focus-visible {
+  outline: 3px solid var(--sims-blue);
+  outline-offset: 2px;
+}
+
+/* ── Champs et interrupteurs ────────────────────────────────── */
+
+.sims-input {
+  width: 100%;
+  min-height: 46px;
+  margin-top: 4px;
+  padding: 6px 12px;
+  border: 2px solid var(--sims-line);
+  border-radius: 12px;
+  background: #ffffff;
+  color: var(--sims-ink);
+  font-size: 19px;
+}
+
+.sims-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 6px 12px;
+  border: 2px solid var(--sims-line);
+  border-radius: 12px;
+  background: #f4fbff;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.sims-toggle[data-checked='true'] {
+  border-color: var(--sims-green-dark);
+  background: #eaffea;
+}
+
+.sims-toggle[data-danger='true'][data-checked='true'] {
+  border-color: var(--sims-red);
+  background: #ffeceb;
+}
+
+.sims-toggle input {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  accent-color: var(--sims-green-dark);
+}
+
+.sims-alert {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 2px solid var(--sims-red);
+  border-radius: 12px;
+  background: #ffeceb;
+  font-size: 18px;
+}
+
+.sims-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border: 2px solid var(--sims-yellow);
+  border-radius: 999px;
+  background: #fff8dc;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* ── Récompenses ────────────────────────────────────────────── */
+
+.sims-xp-pop {
+  position: absolute;
+  right: 6px;
+  top: -6px;
+  font-weight: 800;
+  color: var(--sims-green-dark);
+  text-shadow: 0 1px 0 #ffffff;
+  pointer-events: none;
+  animation: sims-float-up 1.4s ease-out forwards;
+}
+
+@keyframes sims-float-up {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.6);
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(0) scale(1.25);
+  }
+  30% {
+    transform: translateY(-4px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-34px) scale(1);
+  }
+}
+
+.sims-levelup {
+  position: relative;
+  width: 100%;
+  padding: 14px 12px;
+  border: 3px solid var(--sims-yellow);
+  border-radius: 16px;
+  background: linear-gradient(180deg, #fffbe0, #ffe98a);
+  color: var(--sims-ink);
+  font-size: 21px;
+  font-weight: 800;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: var(--sims-shadow);
+  /* Dépassement : le bandeau grossit au-delà de sa taille puis se pose. */
+  animation: sims-pop 520ms cubic-bezier(0.3, 1.8, 0.5, 1) backwards;
+}
+
+@keyframes sims-pop {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.sims-spark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: var(--sims-yellow);
+  box-shadow: 0 0 6px 2px rgba(255, 240, 150, 0.9);
+  pointer-events: none;
+  animation: sims-spark 900ms ease-out forwards;
+}
+
+@keyframes sims-spark {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--dx), var(--dy)) scale(0.2);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sims-plumbob,
+  .sims-node[data-state='current'],
+  .sims-node[data-gate='true'][data-state='current'],
+  .sims-xp-pop,
+  .sims-levelup,
+  .sims-spark {
+    animation: none;
+  }
+  .sims-spark,
+  .sims-xp-pop {
+    display: none;
+  }
+  .sims-need-fill,
+  .sims-btn,
+  .sims-tab {
+    transition: none;
+  }
+  .sims-node[data-gate='true'] {
+    transform: rotate(45deg);
+  }
+}
+
+/* ── Fenêtre de discussion avec un agent ────────────────────── */
+
+.sims-chat {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sims-chat-log {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: min(46vh, 420px);
+  min-height: 160px;
+  overflow-y: auto;
+  padding: 10px;
+  border: 2px solid var(--sims-line);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.sims-bubble {
+  max-width: 88%;
+  padding: 8px 12px;
+  border: 2px solid var(--sims-line);
+  border-radius: 16px 16px 16px 4px;
+  background: #ffffff;
+  box-shadow: 0 2px 0 rgba(15, 58, 86, 0.15);
+  animation: sims-pop 260ms cubic-bezier(0.3, 1.5, 0.5, 1) backwards;
+}
+
+.sims-bubble[data-role='user'] {
+  align-self: flex-end;
+  border-color: var(--sims-green-dark);
+  border-radius: 16px 16px 4px 16px;
+  background: #eaffea;
+}
+
+.sims-bubble-who {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--sims-ink-soft);
+}
+
+.sims-bubble-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.sims-tool-line {
+  align-self: flex-start;
+  max-width: 94%;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #dcecf5;
+  color: var(--sims-ink-soft);
+  font-size: 18px;
+  overflow-wrap: anywhere;
+}
+
+.sims-typing {
+  align-self: flex-start;
+  display: flex;
+  gap: 5px;
+  padding: 10px 14px;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 2px solid var(--sims-line);
+}
+
+.sims-typing span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--sims-blue);
+  animation: sims-typing 1s ease-in-out infinite;
+}
+
+.sims-typing span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.sims-typing span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes sims-typing {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-5px);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sims-bubble,
+  .sims-typing span {
+    animation: none;
+  }
+}

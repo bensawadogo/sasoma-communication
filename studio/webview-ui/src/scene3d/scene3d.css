@@ -1,0 +1,29 @@
+/* Bouton 2D / 3D : en haut à droite, au-dessus du bureau et sous les fenêtres. */
+
+.view-toggle {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  z-index: 31;
+  min-width: 52px;
+  min-height: 44px;
+  padding: 4px 12px;
+  border: 2px solid #4a4a6a;
+  background: #1e1e2e;
+  box-shadow: 2px 2px 0 #0a0a14;
+  color: #e6e6ee;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.view-toggle:hover {
+  background: #2a2a40;
+}
+
+.view-toggle:focus-visible {
+  outline: 3px solid #746fff;
+  outline-offset: 2px;
+}
