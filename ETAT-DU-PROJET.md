@@ -44,6 +44,7 @@ Ce fichier est la **mémoire commune** du projet. Il ne dépend d'aucun outil : 
 - Agents : analyste, andromeda, chef-de-studio, commercial, controleur, createur-visuel, formateur, inspirateur, programmateur, publicitaire, scenariste, stratege, traceur, veilleur
 - Autres IA via OpenRouter : 0 appel(s), 0.0000 $ dépensés au total (journal sans contenu)
 - Derniers changements :
+- e899581 IA autorisee pour scenes et ambiances (Ben n'a pas de camera) ; bidon, etiquette, logo restent de vraies images
 - 9db24f5 Agent andromeda (regles de diffusion Meta : diversite creative, audit, structure) + fiche sourcee knowledge/andromeda-meta.md
 - 2c73898 Agent inspirateur (Pinterest : mots-cles, vraies references, direction de l'histoire)
 - df81a74 docs/22 : Meta Ads et pixels sur mesure ; etat du projet
@@ -51,7 +52,6 @@ Ce fichier est la **mémoire commune** du projet. Il ne dépend d'aucun outil : 
 - dbd7ae7 Autonomie multi-outils : memoire commune (ETAT-DU-PROJET), reglages OpenCode 1.x/Codex/Gemini, export V1, docs/21
 - f684d85 Studio : photos dans le popup de conversation (reduites, metadonnees retirees, enregistrees pour l'agent)
 - 4eb1364 delegue-ia : photos (metadonnees retirees, classe client), doc terminal OpenCode
-- 731594a Jeu de test automatise : taches, lanceur a l'aveugle, estimation avant envoi
 - Tâches ouvertes dans TODO.md (12 affichées) :
   - B : donner ses heures disponibles par mois et son revenu visé (pour calculer les prix).
   - B : donner la liste des entreprises ayant reçu un logo animé (secteur, taille, présence Facebook).

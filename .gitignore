@@ -28,3 +28,7 @@ evals/resultats/
 
 # Photos de clients : jamais sur GitHub
 photos-clients/
+
+# Planches d'inspiration : images d'autrui, usage interne de Ben seulement
+production/inspirations/**/*-moodboard.html
+production/inspirations/**/images/
