@@ -53,6 +53,11 @@ export function verifier() {
     for (const o of outils) for (const re of INTERDITS) if (re.test(o)) err(`outil interdit : ${o}`);
     // seul le chef de studio peut appeler d'autres IA (docs/20) : un seul point de contrôle des envois et des dépenses
     if (nom !== 'chef-de-studio' && String(fm.tools ?? '').includes('delegue-ia')) err('seul le chef de studio peut utiliser delegue-ia');
+    // Meta Ads : lecture seule pour tout agent (jamais création, modification, activation, suppression, dépense)
+    for (const o of outils) {
+      const m = /^mcp__claude_ai_Meta-ads__(.+)$/.exec(o);
+      if (m && !/^(ads_get_|ads_insights_|ads_library_search$|ads_pixel_(event|parameter)_read$|ads_account_get_|ads_experiment_(list|abtest_get|lift_get)|ads_permission_list_)/.test(m[1])) err(`outil Meta Ads qui n'est pas en lecture seule : ${o}`);
+    }
     if (!Array.isArray(fm.skills) || !fm.skills.includes('regles-cm')) err('skill regles-cm non chargé');
     const hook = JSON.stringify(fm.hooks ?? {});
     if (!hook.includes(`garde-fou-ecriture.mjs ${nom}`)) err("garde-fou d'écriture absent ou pour un autre agent");

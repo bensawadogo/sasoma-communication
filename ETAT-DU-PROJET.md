@@ -34,7 +34,7 @@ Ce fichier est la **mémoire commune** du projet. Il ne dépend d'aucun outil : 
 
 ## Reprise (à mettre à jour à chaque fin de session)
 - Fait : serveur `delegue-ia` (OpenRouter, photos, plafonds, simulation sans clé), jeu de test `evals/` prêt, photos dans le popup du Studio, mémoire commune (ce fichier + `scripts/relais.mjs`), réglages OpenCode (vérifiés : agents chargés, `delegue-ia` connecté), Codex et Gemini CLI (écrits, non essayés), recherche sur les outils de secours (`docs/21`).
-- En cours : agent `andromeda` (règles de diffusion de Meta : plan de diversité créative, audit des créations ; source `knowledge/andromeda-meta.md`, lue sur les pages officielles de Meta le 13/11/2026, non essayé en vrai) ; agent `inspirateur` (Pinterest : mots-clés, tri de vraies références, direction de l'histoire ; `production/inspirations/`) et agent `traceur` (pixels sur mesure) créé ; Meta Ads pas encore connecté (`docs/22`). Le jeton OpenRouter déjà enregistré dans OpenCode chez Ben est **expiré** (« API key expired ») : en créer un nouveau.
+- En cours : agent `andromeda` (règles de diffusion de Meta : plan de diversité créative, audit des créations ; source `knowledge/andromeda-meta.md`, lue sur les pages officielles de Meta le 13/11/2026, non essayé en vrai) ; agent `inspirateur` (Pinterest : mots-clés, tri de vraies références, direction de l'histoire ; `production/inspirations/`) et agent `traceur` (pixels sur mesure) créé ; Meta Ads connecté par claude.ai le 14/11/2026, lecture seule branchée au `publicitaire`, aucun outil Meta encore appelé (`docs/22`). Le jeton OpenRouter déjà enregistré dans OpenCode chez Ben est **expiré** (« API key expired ») : en créer un nouveau.
 - Prochain pas : quand Ben a posé sa clé OpenRouter (variable `OPENROUTER_API_KEY`), appel d'essai à moins de 0,01 $, puis `node scripts/delegue-ia/lancer-eval.mjs` (coût maximal 0,66 $, accord de Ben d'abord).
 - Attend Ben : clé OpenRouter plafonnée, notation à l'aveugle de `evals/`, choix du tunnel pour l'iPhone, rendre le dépôt privé.
 
@@ -44,6 +44,7 @@ Ce fichier est la **mémoire commune** du projet. Il ne dépend d'aucun outil : 
 - Agents : analyste, andromeda, chef-de-studio, commercial, controleur, createur-visuel, formateur, inspirateur, programmateur, publicitaire, scenariste, stratege, traceur, veilleur
 - Autres IA via OpenRouter : 0 appel(s), 0.0000 $ dépensés au total (journal sans contenu)
 - Derniers changements :
+- 164fb79 Planche d'inspiration locale (scripts/moodboard.mjs) ; inspirateur : refus de tout scraper et contournement de CAPTCHA
 - e899581 IA autorisee pour scenes et ambiances (Ben n'a pas de camera) ; bidon, etiquette, logo restent de vraies images
 - 9db24f5 Agent andromeda (regles de diffusion Meta : diversite creative, audit, structure) + fiche sourcee knowledge/andromeda-meta.md
 - 2c73898 Agent inspirateur (Pinterest : mots-cles, vraies references, direction de l'histoire)
@@ -51,7 +52,6 @@ Ce fichier est la **mémoire commune** du projet. Il ne dépend d'aucun outil : 
 - caa5a9c Agent traceur (pixel Meta sur mesure), OpenCode: motifs de droits ancres (testes avec un vrai modele), docs
 - dbd7ae7 Autonomie multi-outils : memoire commune (ETAT-DU-PROJET), reglages OpenCode 1.x/Codex/Gemini, export V1, docs/21
 - f684d85 Studio : photos dans le popup de conversation (reduites, metadonnees retirees, enregistrees pour l'agent)
-- 4eb1364 delegue-ia : photos (metadonnees retirees, classe client), doc terminal OpenCode
 - Tâches ouvertes dans TODO.md (12 affichées) :
   - B : donner ses heures disponibles par mois et son revenu visé (pour calculer les prix).
   - B : donner la liste des entreprises ayant reçu un logo animé (secteur, taille, présence Facebook).
